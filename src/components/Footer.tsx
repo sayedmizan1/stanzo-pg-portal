@@ -7,13 +7,13 @@ const Footer = () => (
           <div className="footer-tagline">India's trusted PG discovery platform</div>
         </div>
         <div className="footer-links">
-          <a href={`${import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app"}/login`}>
+          <a href={`${import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in"}/login`}>
             List Your PG
           </a>
-          <a href={`${import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app"}/privacy`}>
+          <a href={`${import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in"}/privacy`}>
             Privacy Policy
           </a>
-          <a href={`${import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app"}/terms`}>
+          <a href={`${import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in"}/terms`}>
             Terms of Use
           </a>
         </div>

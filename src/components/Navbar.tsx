@@ -10,14 +10,14 @@ const Navbar = () => (
         <div className="nav-links">
           <Link to="/" className="nav-link">Find PG</Link>
           <a
-            href={import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app"}
+            href={import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in"}
             className="nav-link"
           >
             List Your PG
           </a>
         </div>
         <a
-          href={import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app/login"}
+          href={import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in/login"}
           className="nav-cta"
         >
           Owner Login
