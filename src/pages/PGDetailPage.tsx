@@ -148,7 +148,7 @@ const PGDetailPage = () => {
   ];
 
   return (
-    <div className="container" style={{ padding: "28px 24px 60px" }}>
+    <div className="container detail-container">
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
@@ -260,7 +260,7 @@ const PGDetailPage = () => {
         <div className="detail-aside">
 
           {/* Enquiry card */}
-          <div className="enquiry-card">
+          <div className="enquiry-card" id="enquiry-card">
             <div className="enquiry-card-header">
               <h3>Request a callback</h3>
               <p>Free enquiry · No brokerage</p>
@@ -374,6 +374,47 @@ const PGDetailPage = () => {
               <span className="summary-val">{cityLabel}</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      <div className="mobile-action-bar">
+        <div className="mobile-action-price">
+          <div className="mobile-price-val">{rentRange}</div>
+          <div className="mobile-price-sub">/month</div>
+        </div>
+        <div className="mobile-action-buttons">
+          {listing.whatsappEnabled && listing.contactPhone && (
+            <a
+              href={`https://wa.me/${listing.contactPhone.replace(/\D/g, "")}?text=Hi, I found your PG "${listing.title}" on Stanzo and I am interested.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mobile-btn-wa"
+              aria-label="WhatsApp"
+            >
+              <IconWA />
+              <span>WhatsApp</span>
+            </a>
+          )}
+          {listing.contactPhone ? (
+            <a
+              href={`tel:${listing.contactPhone}`}
+              className="mobile-btn-call"
+              aria-label="Call Owner"
+            >
+              <IconPhone />
+              <span>Call</span>
+            </a>
+          ) : (
+            <button
+              onClick={() => {
+                document.getElementById("enquiry-card")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="mobile-btn-call"
+            >
+              Enquire Now
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -180,31 +180,38 @@ const HomePage = () => {
 
           {/* Search */}
           <div className="search-wrap">
-            <select value={city} onChange={e => setCity(e.target.value)}>
+            <select value={city} onChange={e => setCity(e.target.value)} className="search-select">
               <option value="">All Cities</option>
               {cities.map(c => (
                 <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
               ))}
             </select>
             <div className="search-divider" />
-            <select value={gender} onChange={e => setGender(e.target.value)}>
+            <select value={gender} onChange={e => setGender(e.target.value)} className="search-select">
               <option value="">Any Gender</option>
               <option value="male">Boys PG</option>
               <option value="female">Girls PG</option>
             </select>
             <div className="search-divider" />
-            <input
-              type="number" placeholder="Min rent (₹)"
-              value={rentMin} onChange={e => setRentMin(e.target.value)}
-              style={{ maxWidth: 130 }}
-            />
-            <input
-              type="number" placeholder="Max rent (₹)"
-              value={rentMax} onChange={e => setRentMax(e.target.value)}
-              style={{ maxWidth: 130 }}
-            />
+            <div className="search-rent-group">
+              <input
+                type="number"
+                placeholder="Min ₹"
+                value={rentMin}
+                onChange={e => setRentMin(e.target.value)}
+                className="search-rent-input"
+              />
+              <span className="search-rent-sep">–</span>
+              <input
+                type="number"
+                placeholder="Max ₹"
+                value={rentMax}
+                onChange={e => setRentMax(e.target.value)}
+                className="search-rent-input"
+              />
+            </div>
             <button className="search-btn" onClick={fetchListings}>
-              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                 <IconSearch /> Search
               </span>
             </button>
@@ -212,15 +219,15 @@ const HomePage = () => {
 
           {/* Stats */}
           <div className="hero-stats">
-            <div>
+            <div className="hero-stat-card">
               <div className="hero-stat-val">{total > 0 ? total : "—"}</div>
               <div className="hero-stat-lbl">Active listings</div>
             </div>
-            <div>
+            <div className="hero-stat-card">
               <div className="hero-stat-val">{cities.length > 0 ? cities.length : "—"}</div>
               <div className="hero-stat-lbl">Cities covered</div>
             </div>
-            <div>
+            <div className="hero-stat-card">
               <div className="hero-stat-val">Free</div>
               <div className="hero-stat-lbl">No brokerage fee</div>
             </div>
@@ -234,37 +241,39 @@ const HomePage = () => {
 
           {/* Filter bar */}
           <div className="filter-bar">
-            <span className="filter-label">Filter by</span>
-            <button
-              className={`filter-chip ${food ? "active" : ""}`}
-              onClick={() => setFood(f => !f)}
-            >
-              <IconFood /> Meals included
-            </button>
-            <button
-              className={`filter-chip ${ac ? "active" : ""}`}
-              onClick={() => setAc(a => !a)}
-            >
-              <IconAC /> AC room
-            </button>
-            <button
-              className={`filter-chip ${wifi ? "active" : ""}`}
-              onClick={() => setWifi(w => !w)}
-            >
-              <IconWifi /> WiFi
-            </button>
-            <button
-              className={`filter-chip ${gender === "male" ? "active" : ""}`}
-              onClick={() => setGender(g => g === "male" ? "" : "male")}
-            >
-              Boys PG
-            </button>
-            <button
-              className={`filter-chip ${gender === "female" ? "active" : ""}`}
-              onClick={() => setGender(g => g === "female" ? "" : "female")}
-            >
-              Girls PG
-            </button>
+            <span className="filter-label">Filter:</span>
+            <div className="filter-scroll">
+              <button
+                className={`filter-chip ${food ? "active" : ""}`}
+                onClick={() => setFood(f => !f)}
+              >
+                <IconFood /> Meals included
+              </button>
+              <button
+                className={`filter-chip ${ac ? "active" : ""}`}
+                onClick={() => setAc(a => !a)}
+              >
+                <IconAC /> AC room
+              </button>
+              <button
+                className={`filter-chip ${wifi ? "active" : ""}`}
+                onClick={() => setWifi(w => !w)}
+              >
+                <IconWifi /> WiFi
+              </button>
+              <button
+                className={`filter-chip ${gender === "male" ? "active" : ""}`}
+                onClick={() => setGender(g => g === "male" ? "" : "male")}
+              >
+                Boys PG
+              </button>
+              <button
+                className={`filter-chip ${gender === "female" ? "active" : ""}`}
+                onClick={() => setGender(g => g === "female" ? "" : "female")}
+              >
+                Girls PG
+              </button>
+            </div>
             {hasFilters && (
               <button className="filter-clear" onClick={clearAll}>Clear all</button>
             )}
