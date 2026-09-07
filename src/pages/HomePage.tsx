@@ -19,49 +19,95 @@ interface Listing {
   amenities: string[];
 }
 
-const GENDER_LABELS: Record<string, string> = {
-  any: "Any",
-  male: "👨 Boys",
-  female: "👩 Girls"
-};
+const GENDER_LABELS: Record<string, string> = { any: "Co-living", male: "Boys PG", female: "Girls PG" };
+const GENDER_TAGS: Record<string, string> = { any: "tag-blue", male: "tag-blue", female: "tag-purple" };
 
-const GENDER_BADGE: Record<string, string> = {
-  any: "badge-blue",
-  male: "badge-blue",
-  female: "badge-pink"
-};
-
-const PGCard = ({ pg }: { pg: Listing }) => (
-  <Link to={`/pg/${pg.slug}`} className="pg-card">
-    {pg.photos && pg.photos.length > 0 ? (
-      <img src={pg.photos[0]} alt={pg.title} className="pg-card-img" loading="lazy" />
-    ) : (
-      <div className="pg-card-img-placeholder">🏠</div>
-    )}
-    <div className="pg-card-body">
-      <p className="pg-card-title">{pg.title}</p>
-      <p className="pg-card-loc">
-        📍 {pg.locality ? `${pg.locality}, ` : ""}{pg.city.charAt(0).toUpperCase() + pg.city.slice(1)}
-      </p>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-        <div>
-          <span className="pg-card-rent">₹{pg.rentFrom.toLocaleString()}</span>
-          {pg.rentTo > pg.rentFrom && <span className="pg-card-rent" style={{ fontSize: 13 }}> – ₹{pg.rentTo.toLocaleString()}</span>}
-          <span className="pg-card-rent"><span>/mo</span></span>
-        </div>
-        <span className={`badge ${GENDER_BADGE[pg.genderPreference]}`}>{GENDER_LABELS[pg.genderPreference]}</span>
-      </div>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-        {pg.availableBeds > 0
-          ? <span className="badge badge-green">✓ {pg.availableBeds} beds available</span>
-          : <span className="badge badge-red">✗ Full</span>}
-        {pg.foodIncluded && <span className="badge badge-amber">🍽️ Food</span>}
-        {pg.acAvailable && <span className="badge badge-blue">❄️ AC</span>}
-        {pg.wifiAvailable && <span className="badge badge-purple">📶 WiFi</span>}
-      </div>
-    </div>
-  </Link>
+const IconHome = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z"/><path d="M9 22V12h6v10"/>
+  </svg>
 );
+
+const IconPin = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>
+  </svg>
+);
+
+const IconSearch = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 16, height: 16 }}>
+    <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+  </svg>
+);
+
+const IconWifi = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/>
+  </svg>
+);
+
+const IconFood = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+  </svg>
+);
+
+const IconAC = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <rect x="1" y="3" width="22" height="11" rx="2"/><path d="M5 14v7"/><path d="M12 14v7"/><path d="M19 14v7"/><path d="M3 18h4"/><path d="M10 18h4"/><path d="M17 18h4"/>
+  </svg>
+);
+
+const IconBed = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 4v16"/><path d="M2 8h18a2 2 0 012 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
+  </svg>
+);
+
+const PGCard = ({ pg }: { pg: Listing }) => {
+  const cityLabel = pg.city.charAt(0).toUpperCase() + pg.city.slice(1);
+  return (
+    <Link to={`/pg/${pg.slug}`} className="pg-card">
+      {pg.photos && pg.photos.length > 0 ? (
+        <img src={pg.photos[0]} alt={pg.title} className="pg-card-img" loading="lazy" />
+      ) : (
+        <div className="pg-card-img-placeholder">
+          <IconHome />
+        </div>
+      )}
+      <div className="pg-card-body">
+        <div className="pg-card-top">
+          <h3 className="pg-card-title">{pg.title}</h3>
+        </div>
+        <div className="pg-card-loc">
+          <IconPin />
+          {pg.locality ? `${pg.locality}, ` : ""}{cityLabel}
+        </div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 12 }}>
+          <span className="pg-card-price">₹{pg.rentFrom.toLocaleString()}</span>
+          {pg.rentTo > pg.rentFrom && (
+            <span style={{ fontSize: 14, color: "var(--muted)" }}>– ₹{pg.rentTo.toLocaleString()}</span>
+          )}
+          <span className="pg-card-price-unit">/month</span>
+        </div>
+        <div className="pg-card-tags">
+          <span className={`tag ${GENDER_TAGS[pg.genderPreference]}`}>{GENDER_LABELS[pg.genderPreference]}</span>
+          {pg.availableBeds > 0 ? (
+            <span className="tag tag-green">
+              <span className="avail-dot green" style={{ marginRight: 4 }} />
+              {pg.availableBeds} beds available
+            </span>
+          ) : (
+            <span className="tag tag-red">Fully occupied</span>
+          )}
+          {pg.foodIncluded && <span className="tag tag-amber">Meals included</span>}
+          {pg.acAvailable && <span className="tag tag-gray">AC</span>}
+          {pg.wifiAvailable && <span className="tag tag-gray">WiFi</span>}
+        </div>
+      </div>
+    </Link>
+  );
+};
 
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,15 +120,13 @@ const HomePage = () => {
   const [gender, setGender] = useState(searchParams.get("gender") || "");
   const [food, setFood] = useState(searchParams.get("food") === "true");
   const [ac, setAc] = useState(searchParams.get("ac") === "true");
+  const [wifi, setWifi] = useState(searchParams.get("wifi") === "true");
   const [rentMin, setRentMin] = useState(searchParams.get("rentMin") || "");
   const [rentMax, setRentMax] = useState(searchParams.get("rentMax") || "");
 
-  const fetchCities = async () => {
-    try {
-      const res = await api.get("/listings/cities");
-      setCities(res.data || []);
-    } catch { /* silent */ }
-  };
+  useEffect(() => {
+    api.get("/listings/cities").then(r => setCities(r.data || [])).catch(() => {});
+  }, []);
 
   const fetchListings = useCallback(async () => {
     setLoading(true);
@@ -92,157 +136,151 @@ const HomePage = () => {
       if (gender) params.gender = gender;
       if (food) params.food = "true";
       if (ac) params.ac = "true";
+      if (wifi) params.wifi = "true";
       if (rentMin) params.rentMin = rentMin;
       if (rentMax) params.rentMax = rentMax;
-
       const res = await api.get("/listings", { params });
       setListings(res.data.listings || []);
       setTotal(res.data.total || 0);
+      const p: Record<string, string> = {};
+      if (city) p.city = city;
+      if (gender) p.gender = gender;
+      if (food) p.food = "true";
+      if (ac) p.ac = "true";
+      if (wifi) p.wifi = "true";
+      if (rentMin) p.rentMin = rentMin;
+      if (rentMax) p.rentMax = rentMax;
+      setSearchParams(p, { replace: true });
     } catch {
       setListings([]);
     } finally {
       setLoading(false);
     }
-  }, [city, gender, food, ac, rentMin, rentMax]);
+  }, [city, gender, food, ac, wifi, rentMin, rentMax]);
 
-  useEffect(() => {
-    fetchCities();
-  }, []);
+  useEffect(() => { fetchListings(); }, [fetchListings]);
 
-  useEffect(() => {
-    fetchListings();
-    // Sync URL
-    const p: Record<string, string> = {};
-    if (city) p.city = city;
-    if (gender) p.gender = gender;
-    if (food) p.food = "true";
-    if (ac) p.ac = "true";
-    if (rentMin) p.rentMin = rentMin;
-    if (rentMax) p.rentMax = rentMax;
-    setSearchParams(p, { replace: true });
-  }, [fetchListings]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchListings();
-  };
-
-  const clearFilters = () => {
+  const clearAll = () => {
     setCity(""); setGender(""); setFood(false); setAc(false);
-    setRentMin(""); setRentMax("");
+    setWifi(false); setRentMin(""); setRentMax("");
   };
 
-  const hasFilters = !!(city || gender || food || ac || rentMin || rentMax);
+  const hasFilters = !!(city || gender || food || ac || wifi || rentMin || rentMax);
 
   return (
     <>
-      {/* ─── HERO ─── */}
+      {/* HERO */}
       <section className="hero">
         <div className="container">
-          <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>
-            🏠 India's PG Discovery Portal
-          </p>
-          <h1 style={{ marginBottom: 16 }}>
-            Find Your Perfect<br />
-            <span style={{ color: "#a5b4fc" }}>PG Accommodation</span>
-          </h1>
-          <p style={{ marginBottom: 36 }}>
-            Browse verified PG listings from trusted owners. Filter by city, rent, gender preference and more.
+          <div className="hero-eyebrow">India's PG Discovery Platform</div>
+          <h1>Find the right PG,<br /><span>anywhere in India</span></h1>
+          <p className="hero-sub">
+            Browse verified PG accommodations from trusted owners. No brokerage, no hidden charges.
           </p>
 
-          {/* Search box */}
-          <form className="search-box" onSubmit={handleSearch}>
-            <select value={city} onChange={e => setCity(e.target.value)} style={{ flex: "1.5" }}>
-              <option value="">📍 All Cities</option>
+          {/* Search */}
+          <div className="search-wrap">
+            <select value={city} onChange={e => setCity(e.target.value)}>
+              <option value="">All Cities</option>
               {cities.map(c => (
                 <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
               ))}
             </select>
-
+            <div className="search-divider" />
             <select value={gender} onChange={e => setGender(e.target.value)}>
-              <option value="">👥 Any Gender</option>
-              <option value="male">👨 Boys Only</option>
-              <option value="female">👩 Girls Only</option>
+              <option value="">Any Gender</option>
+              <option value="male">Boys PG</option>
+              <option value="female">Girls PG</option>
             </select>
-
+            <div className="search-divider" />
             <input
-              type="number" placeholder="Min ₹" value={rentMin}
-              onChange={e => setRentMin(e.target.value)}
-              style={{ maxWidth: 100 }}
+              type="number" placeholder="Min rent (₹)"
+              value={rentMin} onChange={e => setRentMin(e.target.value)}
+              style={{ maxWidth: 130 }}
             />
             <input
-              type="number" placeholder="Max ₹" value={rentMax}
-              onChange={e => setRentMax(e.target.value)}
-              style={{ maxWidth: 100 }}
+              type="number" placeholder="Max rent (₹)"
+              value={rentMax} onChange={e => setRentMax(e.target.value)}
+              style={{ maxWidth: 130 }}
             />
-
-            <button type="submit" className="btn btn-primary" style={{ flexShrink: 0 }}>
-              🔍 Search
+            <button className="search-btn" onClick={fetchListings}>
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <IconSearch /> Search
+              </span>
             </button>
-          </form>
+          </div>
 
-          {/* Quick stats */}
-          <div style={{ marginTop: 28, display: "flex", gap: 24, flexWrap: "wrap" }}>
-            {[
-              { icon: "🏠", label: `${total || "1000+"}`, sub: "PG Listings" },
-              { icon: "🌆", label: `${cities.length || "50+"}`, sub: "Cities" },
-              { icon: "✅", label: "100%", sub: "Verified Owners" }
-            ].map(s => (
-              <div key={s.sub} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 22 }}>{s.icon}</span>
-                <div>
-                  <p style={{ fontWeight: 800, fontSize: 18, color: "#fff", lineHeight: 1 }}>{s.label}</p>
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,.6)" }}>{s.sub}</p>
-                </div>
-              </div>
-            ))}
+          {/* Stats */}
+          <div className="hero-stats">
+            <div>
+              <div className="hero-stat-val">{total > 0 ? total : "—"}</div>
+              <div className="hero-stat-lbl">Active listings</div>
+            </div>
+            <div>
+              <div className="hero-stat-val">{cities.length > 0 ? cities.length : "—"}</div>
+              <div className="hero-stat-lbl">Cities covered</div>
+            </div>
+            <div>
+              <div className="hero-stat-val">Free</div>
+              <div className="hero-stat-lbl">No brokerage fee</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ─── LISTING RESULTS ─── */}
-      <section style={{ padding: "48px 0" }}>
+      {/* LISTINGS */}
+      <section className="section">
         <div className="container">
 
-          {/* Filter chips */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
-            <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 600 }}>Filters:</span>
+          {/* Filter bar */}
+          <div className="filter-bar">
+            <span className="filter-label">Filter by</span>
             <button
-              className={`chip ${food ? "active" : ""}`}
+              className={`filter-chip ${food ? "active" : ""}`}
               onClick={() => setFood(f => !f)}
             >
-              🍽️ Food Included
+              <IconFood /> Meals included
             </button>
             <button
-              className={`chip ${ac ? "active" : ""}`}
+              className={`filter-chip ${ac ? "active" : ""}`}
               onClick={() => setAc(a => !a)}
             >
-              ❄️ AC
+              <IconAC /> AC room
+            </button>
+            <button
+              className={`filter-chip ${wifi ? "active" : ""}`}
+              onClick={() => setWifi(w => !w)}
+            >
+              <IconWifi /> WiFi
+            </button>
+            <button
+              className={`filter-chip ${gender === "male" ? "active" : ""}`}
+              onClick={() => setGender(g => g === "male" ? "" : "male")}
+            >
+              Boys PG
+            </button>
+            <button
+              className={`filter-chip ${gender === "female" ? "active" : ""}`}
+              onClick={() => setGender(g => g === "female" ? "" : "female")}
+            >
+              Girls PG
             </button>
             {hasFilters && (
-              <button
-                onClick={clearFilters}
-                style={{ fontSize: 12, color: "var(--red)", cursor: "pointer", background: "none", border: "none", padding: "4px 8px", fontWeight: 600 }}
-              >
-                ✕ Clear all
-              </button>
+              <button className="filter-clear" onClick={clearAll}>Clear all</button>
             )}
           </div>
 
           {/* Results header */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 8 }}>
-            <h2 style={{ fontSize: 20, color: "var(--text)" }}>
-              {loading ? "Searching…" : `${total} PG${total !== 1 ? "s" : ""} Found`}
-              {city && ` in ${city.charAt(0).toUpperCase() + city.slice(1)}`}
+          <div className="section-header">
+            <h2 className="section-title">
+              {loading
+                ? "Searching..."
+                : `${total} PG${total !== 1 ? "s" : ""} found${city ? ` in ${city.charAt(0).toUpperCase() + city.slice(1)}` : ""}`}
             </h2>
             {cities.length > 0 && !city && (
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {cities.slice(0, 6).map(c => (
-                  <Link
-                    key={c}
-                    to={`/city/${c}`}
-                    style={{ fontSize: 12, color: "var(--brand)", textDecoration: "none", padding: "4px 10px", borderRadius: 999, border: "1px solid var(--brand-light)", background: "var(--brand-light)" }}
-                  >
+                {cities.slice(0, 5).map(c => (
+                  <Link key={c} to={`/city/${c}`} className="section-link" style={{ fontSize: 13 }}>
                     {c.charAt(0).toUpperCase() + c.slice(1)}
                   </Link>
                 ))}
@@ -254,18 +292,18 @@ const HomePage = () => {
           {loading ? (
             <div className="pg-grid">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="skeleton" style={{ height: 320 }} />
+                <div key={i} className="skeleton" style={{ height: 310 }} />
               ))}
             </div>
           ) : listings.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "80px 20px" }}>
-              <p style={{ fontSize: 60, marginBottom: 16 }}>🏚️</p>
-              <h3 style={{ fontSize: 20, marginBottom: 8 }}>No PGs found</h3>
-              <p style={{ color: "var(--muted)" }}>Try adjusting your filters or search in a different city.</p>
+            <div className="empty-state">
+              <div className="empty-icon">
+                <IconBed />
+              </div>
+              <div className="empty-title">No PGs found</div>
+              <div className="empty-text">Try adjusting your filters or selecting a different city.</div>
               {hasFilters && (
-                <button onClick={clearFilters} className="btn btn-outline" style={{ marginTop: 20 }}>
-                  Clear Filters
-                </button>
+                <button onClick={clearAll} className="empty-cta">Clear filters</button>
               )}
             </div>
           ) : (
@@ -276,25 +314,20 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ─── CITY EXPLORE ─── */}
+      {/* CITY BROWSE */}
       {cities.length > 0 && (
-        <section style={{ padding: "40px 0 60px", background: "#fff", borderTop: "1px solid var(--border)" }}>
+        <div className="city-strip">
           <div className="container">
-            <h2 style={{ fontSize: 22, marginBottom: 20 }}>🌆 Browse by City</h2>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <h2 className="section-title">Browse by city</h2>
+            <div className="city-grid">
               {cities.map(c => (
-                <Link
-                  key={c}
-                  to={`/city/${c}`}
-                  className="btn btn-white"
-                  style={{ fontSize: 13 }}
-                >
+                <Link key={c} to={`/city/${c}`} className="city-btn">
                   {c.charAt(0).toUpperCase() + c.slice(1)}
                 </Link>
               ))}
             </div>
           </div>
-        </section>
+        </div>
       )}
     </>
   );

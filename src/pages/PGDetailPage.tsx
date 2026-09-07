@@ -28,14 +28,51 @@ interface Listing {
   views: number;
 }
 
-interface LeadForm {
-  name: string;
-  phone: string;
-  email: string;
-  message: string;
-}
+interface LeadForm { name: string; phone: string; email: string; message: string; }
 
-const GENDER_LABEL = { any: "Any Gender", male: "Boys Only", female: "Girls Only" };
+const GENDER_LABEL: Record<string, string> = {
+  any: "Co-living (Male & Female)",
+  male: "Boys PG",
+  female: "Girls PG"
+};
+
+const IconHome = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z"/>
+    <path d="M9 22V12h6v10"/>
+  </svg>
+);
+
+const IconPin = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14, flexShrink: 0 }}>
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+    <circle cx="12" cy="9" r="2.5"/>
+  </svg>
+);
+
+const IconCheck = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+);
+
+const IconX = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+);
+
+const IconPhone = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 16, height: 16 }}>
+    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.77 9.75 19.79 19.79 0 01.7 1.11 2 2 0 012.7 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.08-1.08a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+  </svg>
+);
+
+const IconWA = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 16, height: 16 }}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+);
 
 const PGDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -48,27 +85,19 @@ const PGDetailPage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await api.get(`/listings/slug/${slug}`);
-        setListing(res.data);
-      } catch {
-        setListing(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    api.get(`/listings/slug/${slug}`)
+      .then(r => setListing(r.data))
+      .catch(() => setListing(null))
+      .finally(() => setLoading(false));
   }, [slug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.phone) {
-      setError("Name and phone are required.");
+    if (!form.name.trim() || !form.phone.trim()) {
+      setError("Please enter your name and phone number.");
       return;
     }
-    setSubmitting(true);
-    setError("");
+    setSubmitting(true); setError("");
     try {
       await api.post("/leads", { listingId: listing!._id, ...form });
       setSubmitted(true);
@@ -81,119 +110,125 @@ const PGDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="container" style={{ padding: "40px 20px" }}>
-        <div className="skeleton" style={{ height: 400, borderRadius: 14, marginBottom: 24 }} />
-        <div className="skeleton" style={{ height: 200, borderRadius: 14 }} />
+      <div className="container" style={{ padding: "32px 24px" }}>
+        <div className="skeleton" style={{ height: 420, borderRadius: 14, marginBottom: 24 }} />
+        <div style={{ display: "flex", gap: 24 }}>
+          <div className="skeleton" style={{ flex: 1, height: 200, borderRadius: 14 }} />
+          <div className="skeleton" style={{ width: 340, height: 300, borderRadius: 14 }} />
+        </div>
       </div>
     );
   }
 
   if (!listing) {
     return (
-      <div className="container" style={{ padding: "80px 20px", textAlign: "center" }}>
-        <p style={{ fontSize: 60 }}>😕</p>
-        <h2 style={{ fontSize: 24, margin: "16px 0 8px" }}>Listing Not Found</h2>
-        <p style={{ color: "var(--muted)", marginBottom: 24 }}>This PG listing may have been removed or is no longer available.</p>
-        <Link to="/" className="btn btn-primary">← Browse All PGs</Link>
+      <div className="container" style={{ padding: "80px 24px" }}>
+        <div className="empty-state">
+          <div className="empty-icon"><IconHome /></div>
+          <div className="empty-title">Listing not found</div>
+          <div className="empty-text">This PG listing may no longer be available or has been removed.</div>
+          <Link to="/" className="empty-cta">Browse all PGs</Link>
+        </div>
       </div>
     );
   }
 
   const photos = listing.photos?.length > 0 ? listing.photos : [];
   const cityLabel = listing.city.charAt(0).toUpperCase() + listing.city.slice(1);
+  const rentRange = listing.rentTo > listing.rentFrom
+    ? `₹${listing.rentFrom.toLocaleString()} – ₹${listing.rentTo.toLocaleString()}`
+    : `₹${listing.rentFrom.toLocaleString()}`;
+
+  const facts = [
+    { label: "Food / Meals", value: listing.foodIncluded },
+    { label: "Air Conditioning", value: listing.acAvailable },
+    { label: "WiFi", value: listing.wifiAvailable },
+    { label: "Parking", value: listing.parkingAvailable },
+    { label: "Laundry", value: listing.laundryAvailable },
+  ];
 
   return (
-    <div className="container" style={{ padding: "32px 20px 60px" }}>
+    <div className="container" style={{ padding: "28px 24px 60px" }}>
 
       {/* Breadcrumb */}
-      <div style={{ marginBottom: 16, fontSize: 13, color: "var(--muted)" }}>
-        <Link to="/" style={{ color: "var(--brand)", textDecoration: "none" }}>Home</Link>
-        {" / "}
-        <Link to={`/city/${listing.city}`} style={{ color: "var(--brand)", textDecoration: "none" }}>{cityLabel}</Link>
-        {" / "} {listing.title}
+      <div className="breadcrumb">
+        <Link to="/">Home</Link>
+        <span className="breadcrumb-sep">/</span>
+        <Link to={`/city/${listing.city}`}>{cityLabel}</Link>
+        <span className="breadcrumb-sep">/</span>
+        <span style={{ color: "var(--muted)" }}>{listing.title}</span>
       </div>
 
-      {/* Detail layout */}
-      <div className="detail-layout" style={{ display: "flex", gap: 28, alignItems: "flex-start", flexWrap: "wrap" }}>
+      <div className="detail-wrap">
+        {/* ─── MAIN CONTENT ─── */}
+        <div className="detail-main">
 
-        {/* Left — Details */}
-        <div style={{ flex: "1 1 560px", minWidth: 0 }}>
-
-          {/* Photo gallery */}
+          {/* Gallery */}
           {photos.length > 0 ? (
-            <div>
-              <img src={photos[activePhoto]} alt={listing.title} className="detail-photo" />
+            <>
+              <img src={photos[activePhoto]} alt={listing.title} className="detail-gallery-main" />
               {photos.length > 1 && (
-                <div style={{ display: "flex", gap: 8, marginTop: 8, overflowX: "auto", paddingBottom: 4 }}>
+                <div className="detail-thumbs">
                   {photos.map((url, i) => (
                     <img
                       key={i} src={url} alt=""
+                      className={`detail-thumb ${i === activePhoto ? "active" : ""}`}
                       onClick={() => setActivePhoto(i)}
-                      style={{
-                        width: 70, height: 55, borderRadius: 8, objectFit: "cover", cursor: "pointer", flexShrink: 0,
-                        border: i === activePhoto ? "2.5px solid var(--brand)" : "2.5px solid transparent"
-                      }}
                     />
                   ))}
                 </div>
               )}
-            </div>
+            </>
           ) : (
-            <div className="detail-photo-placeholder">🏠</div>
+            <div className="detail-gallery-placeholder">
+              <div style={{ width: 60, height: 60, color: "#93c5fd" }}><IconHome /></div>
+            </div>
           )}
 
-          {/* Title + badges */}
-          <div style={{ marginTop: 24, marginBottom: 16 }}>
-            <h1 style={{ fontSize: 26, marginBottom: 8 }}>{listing.title}</h1>
-            <p style={{ color: "var(--muted)", fontSize: 14, marginBottom: 12 }}>
-              📍 {listing.address}{listing.locality ? `, ${listing.locality}` : ""}, {cityLabel} {listing.pincode}
-            </p>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {listing.availableBeds > 0
-                ? <span className="badge badge-green" style={{ fontSize: 13, padding: "5px 14px" }}>✓ {listing.availableBeds} beds available</span>
-                : <span className="badge badge-red" style={{ fontSize: 13, padding: "5px 14px" }}>✗ Fully Occupied</span>}
-              <span className="badge badge-blue" style={{ fontSize: 13, padding: "5px 14px" }}>
-                {GENDER_LABEL[listing.genderPreference]}
+          {/* Title block */}
+          <h1 className="detail-title">{listing.title}</h1>
+          <div className="detail-loc">
+            <IconPin />
+            {listing.address}{listing.locality ? `, ${listing.locality}` : ""}, {cityLabel}
+            {listing.pincode ? ` — ${listing.pincode}` : ""}
+          </div>
+          <div className="detail-tags">
+            {listing.availableBeds > 0 ? (
+              <span className="tag tag-green">
+                <span className="avail-dot green" style={{ marginRight: 4 }} />
+                {listing.availableBeds} of {listing.totalBeds} beds available
               </span>
-              <span className="badge badge-gray" style={{ fontSize: 13, padding: "5px 14px" }}>👁️ {listing.views} views</span>
-            </div>
+            ) : (
+              <span className="tag tag-red">Fully occupied</span>
+            )}
+            <span className="tag tag-blue">{GENDER_LABEL[listing.genderPreference]}</span>
+            <span className="tag tag-gray">{listing.views} views</span>
           </div>
 
           {/* Rent */}
-          <div className="card" style={{ padding: 20, marginBottom: 20 }}>
-            <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 4 }}>Monthly Rent</p>
-            <p style={{ fontSize: 32, fontWeight: 800, color: "var(--brand)" }}>
-              ₹{listing.rentFrom.toLocaleString()}
-              {listing.rentTo > listing.rentFrom && (
-                <span style={{ fontSize: 20, color: "var(--muted)" }}> – ₹{listing.rentTo.toLocaleString()}</span>
-              )}
+          <div className="info-block" style={{ marginTop: 20 }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+              <span style={{ fontSize: 32, fontWeight: 800, color: "var(--text)" }}>{rentRange}</span>
+              <span style={{ fontSize: 14, color: "var(--muted)" }}>per month</span>
+            </div>
+            <p style={{ fontSize: 12, color: "var(--subtle)", marginTop: 4 }}>
+              Per bed · Security deposit may apply
             </p>
-            <p style={{ fontSize: 12, color: "var(--subtle)", marginTop: 4 }}>Per bed/month · Excluding security deposit</p>
           </div>
 
-          {/* Quick feature flags */}
-          <div className="card" style={{ padding: 20, marginBottom: 20 }}>
-            <h3 style={{ fontSize: 15, marginBottom: 14 }}>Quick Facts</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
-              {[
-                { icon: "🍽️", label: "Food Included", val: listing.foodIncluded },
-                { icon: "❄️", label: "AC Available", val: listing.acAvailable },
-                { icon: "📶", label: "WiFi", val: listing.wifiAvailable },
-                { icon: "🚗", label: "Parking", val: listing.parkingAvailable },
-                { icon: "👕", label: "Laundry", val: listing.laundryAvailable }
-              ].map(({ icon, label, val }) => (
-                <div
-                  key={label}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 8, padding: "10px 14px",
-                    borderRadius: 10, background: val ? "#f0fdf4" : "#f8fafc",
-                    border: `1px solid ${val ? "#bbf7d0" : "#e2e8f0"}`
-                  }}
-                >
-                  <span style={{ fontSize: 18 }}>{icon}</span>
-                  <div>
-                    <p style={{ fontSize: 12, fontWeight: 600, color: val ? "#15803d" : "var(--muted)" }}>{label}</p>
-                    <p style={{ fontSize: 11, color: val ? "#16a34a" : "var(--subtle)" }}>{val ? "Available" : "Not Available"}</p>
+          {/* Facilities */}
+          <div className="info-block">
+            <h2 className="info-block-title">Facilities</h2>
+            <div className="fact-grid">
+              {facts.map(({ label, value }) => (
+                <div key={label} className="fact-item">
+                  <div className="fact-item-label">{label}</div>
+                  <div
+                    className={`fact-item-value ${value ? "yes" : "no"}`}
+                    style={{ display: "flex", alignItems: "center", gap: 4 }}
+                  >
+                    {value ? <IconCheck /> : <IconX />}
+                    {value ? "Available" : "Not available"}
                   </div>
                 </div>
               ))}
@@ -202,138 +237,141 @@ const PGDetailPage = () => {
 
           {/* Description */}
           {listing.description && (
-            <div className="card" style={{ padding: 20, marginBottom: 20 }}>
-              <h3 style={{ fontSize: 15, marginBottom: 12 }}>About This PG</h3>
-              <p style={{ color: "var(--muted)", lineHeight: 1.7, fontSize: 14, whiteSpace: "pre-wrap" }}>{listing.description}</p>
+            <div className="info-block">
+              <h2 className="info-block-title">About this PG</h2>
+              <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.75, whiteSpace: "pre-wrap" }}>
+                {listing.description}
+              </p>
             </div>
           )}
 
           {/* Amenities */}
           {listing.amenities?.length > 0 && (
-            <div className="card" style={{ padding: 20 }}>
-              <h3 style={{ fontSize: 15, marginBottom: 12 }}>Amenities</h3>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {listing.amenities.map(a => (
-                  <span key={a} className="amenity-tag">✓ {a}</span>
-                ))}
+            <div className="info-block">
+              <h2 className="info-block-title">Amenities</h2>
+              <div className="amenity-list">
+                {listing.amenities.map(a => <span key={a} className="amenity">{a}</span>)}
               </div>
             </div>
           )}
         </div>
 
-        {/* Right — Enquiry sidebar */}
-        <div style={{ width: "100%", maxWidth: 360, flexShrink: 0 }}>
+        {/* ─── SIDEBAR ─── */}
+        <div className="detail-aside">
+
+          {/* Enquiry card */}
           <div className="enquiry-card">
-            {submitted ? (
-              <div style={{ textAlign: "center", padding: "20px 0" }}>
-                <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
-                <h3 style={{ fontSize: 18, marginBottom: 8 }}>Enquiry Sent!</h3>
-                <p style={{ color: "var(--muted)", fontSize: 14 }}>
-                  The PG owner will contact you shortly on <strong>{form.phone}</strong>.
-                </p>
-                <button
-                  onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", email: "", message: "" }); }}
-                  className="btn btn-outline"
-                  style={{ marginTop: 20, width: "100%" }}
-                >
-                  Send Another Enquiry
-                </button>
+            <div className="enquiry-card-header">
+              <h3>Request a callback</h3>
+              <p>Free enquiry · No brokerage</p>
+              <div className="enquiry-card-price">
+                {rentRange} <span>/month</span>
               </div>
-            ) : (
-              <>
-                <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4 }}>Interested? Send Enquiry</h3>
-                <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20 }}>Free & instant. Owner will call you back.</p>
+            </div>
 
-                {error && (
-                  <div style={{ background: "#fee2e2", color: "#b91c1c", padding: "10px 14px", borderRadius: 8, fontSize: 13, marginBottom: 16 }}>
-                    {error}
-                  </div>
-                )}
-
+            <div className="enquiry-card-body">
+              {submitted ? (
+                <div className="success-box">
+                  <div className="success-icon"><IconCheck /></div>
+                  <div className="success-title">Enquiry sent successfully</div>
+                  <p className="success-text">
+                    The PG owner will contact you shortly on <strong>{form.phone}</strong>.
+                  </p>
+                  <button
+                    onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", email: "", message: "" }); }}
+                    style={{ marginTop: 16, background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 600, cursor: "pointer", width: "100%" }}
+                  >
+                    Send another enquiry
+                  </button>
+                </div>
+              ) : (
                 <form onSubmit={handleSubmit}>
-                  <label className="field">
-                    <span>Your Name *</span>
+                  {error && <div className="error-box">{error}</div>}
+
+                  <div className="field-group">
+                    <label>Full name *</label>
                     <input
-                      type="text" required placeholder="e.g. Riya Sharma"
+                      type="text" required placeholder="Your name"
                       value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                     />
-                  </label>
-                  <label className="field">
-                    <span>Phone Number *</span>
+                  </div>
+                  <div className="field-group">
+                    <label>Phone number *</label>
                     <input
-                      type="tel" required placeholder="e.g. 9876543210"
+                      type="tel" required placeholder="10-digit mobile number"
                       value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                     />
-                  </label>
-                  <label className="field">
-                    <span>Email (optional)</span>
+                  </div>
+                  <div className="field-group">
+                    <label>Email address</label>
                     <input
-                      type="email" placeholder="e.g. riya@gmail.com"
+                      type="email" placeholder="Optional"
                       value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                     />
-                  </label>
-                  <label className="field">
-                    <span>Message (optional)</span>
+                  </div>
+                  <div className="field-group">
+                    <label>Message</label>
                     <textarea
-                      rows={3} placeholder="Move-in date, any questions…"
+                      rows={3} placeholder="Move-in date, any questions..."
                       style={{ resize: "none" }}
                       value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                     />
-                  </label>
+                  </div>
 
-                  <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center", padding: "13px" }} disabled={submitting}>
-                    {submitting ? "Sending…" : "📩 Send Enquiry"}
+                  <button type="submit" className="btn-submit" disabled={submitting}>
+                    {submitting ? "Sending..." : "Send Enquiry"}
                   </button>
                 </form>
+              )}
 
-                {/* WhatsApp CTA */}
-                {listing.whatsappEnabled && listing.contactPhone && (
-                  <a
-                    href={`https://wa.me/${listing.contactPhone.replace(/\D/g, "")}?text=Hi! I saw your PG "${listing.title}" on Stanzo and I'm interested.`}
-                    target="_blank" rel="noopener noreferrer"
-                    className="btn btn-whatsapp"
-                    style={{ width: "100%", justifyContent: "center", padding: "13px", marginTop: 10 }}
-                  >
-                    💬 Chat on WhatsApp
-                  </a>
-                )}
+              {/* WhatsApp */}
+              {listing.whatsappEnabled && listing.contactPhone && (
+                <a
+                  href={`https://wa.me/${listing.contactPhone.replace(/\D/g, "")}?text=Hi, I found your PG "${listing.title}" on Stanzo and I am interested.`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="btn-wa"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+                >
+                  <IconWA /> Chat on WhatsApp
+                </a>
+              )}
 
-                {listing.contactPhone && (
-                  <a
-                    href={`tel:${listing.contactPhone}`}
-                    className="btn btn-outline"
-                    style={{ width: "100%", justifyContent: "center", padding: "13px", marginTop: 10 }}
-                  >
-                    📞 Call Owner
-                  </a>
-                )}
+              {/* Call */}
+              {listing.contactPhone && (
+                <a
+                  href={`tel:${listing.contactPhone}`}
+                  className="btn-call"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+                >
+                  <IconPhone /> {listing.contactPhone}
+                </a>
+              )}
 
-                <p style={{ fontSize: 11, color: "var(--subtle)", textAlign: "center", marginTop: 14 }}>
-                  🔒 Your details are kept private and only shared with the PG owner.
-                </p>
-              </>
-            )}
+              <p className="privacy-note">
+                Your contact details are only shared with the PG owner.
+              </p>
+            </div>
           </div>
 
-          {/* PG Summary card */}
-          <div className="card" style={{ padding: 16, marginTop: 16, fontSize: 13 }}>
-            <p style={{ fontWeight: 600, marginBottom: 10, color: "var(--text)" }}>PG Summary</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, color: "var(--muted)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Total Beds</span><span style={{ fontWeight: 600, color: "var(--text)" }}>{listing.totalBeds}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Available Beds</span>
-                <span style={{ fontWeight: 600, color: listing.availableBeds > 0 ? "#16a34a" : "#dc2626" }}>
-                  {listing.availableBeds}
-                </span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Gender</span><span style={{ fontWeight: 600, color: "var(--text)" }}>{GENDER_LABEL[listing.genderPreference]}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>City</span><span style={{ fontWeight: 600, color: "var(--text)" }}>{cityLabel}</span>
-              </div>
+          {/* Summary */}
+          <div className="summary-card">
+            <div className="summary-row">
+              <span className="summary-key">Total beds</span>
+              <span className="summary-val">{listing.totalBeds}</span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-key">Available beds</span>
+              <span className="summary-val" style={{ color: listing.availableBeds > 0 ? "var(--green)" : "var(--red)" }}>
+                {listing.availableBeds}
+              </span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-key">Gender preference</span>
+              <span className="summary-val">{GENDER_LABEL[listing.genderPreference]}</span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-key">City</span>
+              <span className="summary-val">{cityLabel}</span>
             </div>
           </div>
         </div>

@@ -5,18 +5,23 @@ const Navbar = () => (
     <div className="container">
       <div className="nav-inner">
         <Link to="/" className="nav-logo">
-          Stanzo <span>PG Portal</span>
+          Stanzo <span>PG</span>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 13, color: "var(--muted)" }}>🏠 Find your perfect PG</span>
+        <div className="nav-links">
+          <Link to="/" className="nav-link">Find PG</Link>
           <a
             href={import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app"}
-            className="btn btn-outline"
-            style={{ padding: "8px 18px", fontSize: 13 }}
+            className="nav-link"
           >
-            Owner Login
+            List Your PG
           </a>
         </div>
+        <a
+          href={import.meta.env.VITE_DASHBOARD_URL || "https://stayyo.netlify.app/login"}
+          className="nav-cta"
+        >
+          Owner Login
+        </a>
       </div>
     </div>
   </nav>

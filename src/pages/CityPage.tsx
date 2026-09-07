@@ -18,8 +18,28 @@ interface Listing {
   photos: string[];
 }
 
-const GENDER_BADGE: Record<string, string> = { any: "badge-blue", male: "badge-blue", female: "badge-pink" };
-const GENDER_LABELS: Record<string, string> = { any: "Any", male: "👨 Boys", female: "👩 Girls" };
+const GENDER_TAGS: Record<string, string> = { any: "tag-blue", male: "tag-blue", female: "tag-purple" };
+const GENDER_LABELS: Record<string, string> = { any: "Co-living", male: "Boys PG", female: "Girls PG" };
+
+const IconHome = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z"/>
+    <path d="M9 22V12h6v10"/>
+  </svg>
+);
+
+const IconPin = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 12, height: 12, flexShrink: 0 }}>
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+    <circle cx="12" cy="9" r="2.5"/>
+  </svg>
+);
+
+const IconBack = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}>
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+);
 
 const CityPage = () => {
   const { city } = useParams<{ city: string }>();
@@ -28,91 +48,87 @@ const CityPage = () => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get("/listings", { params: { city } });
-        setListings(res.data.listings || []);
-        setTotal(res.data.total || 0);
-      } catch {
-        setListings([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    api.get("/listings", { params: { city } })
+      .then(r => { setListings(r.data.listings || []); setTotal(r.data.total || 0); })
+      .catch(() => setListings([]))
+      .finally(() => setLoading(false));
   }, [city]);
 
   const cityLabel = city ? city.charAt(0).toUpperCase() + city.slice(1) : "";
 
   return (
-    <div>
-      {/* City hero banner */}
-      <section style={{
-        background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%)",
-        padding: "48px 0 40px", color: "#fff"
-      }}>
+    <>
+      {/* City Hero */}
+      <section className="city-hero">
         <div className="container">
-          <div style={{ marginBottom: 8, fontSize: 13 }}>
-            <Link to="/" style={{ color: "rgba(255,255,255,.6)", textDecoration: "none" }}>← All Cities</Link>
-          </div>
-          <h1 style={{ fontSize: 36, marginBottom: 8 }}>PG in {cityLabel}</h1>
-          <p style={{ color: "rgba(255,255,255,.7)", fontSize: 15 }}>
-            {loading ? "Loading…" : `${total} verified PG listing${total !== 1 ? "s" : ""} in ${cityLabel}`}
-          </p>
+          <Link to="/" className="city-hero-back"><IconBack /> Back to all cities</Link>
+          <h1>PG accommodation in {cityLabel}</h1>
+          <p>{loading ? "Loading..." : `${total} verified PG listing${total !== 1 ? "s" : ""} in ${cityLabel}`}</p>
         </div>
       </section>
 
       {/* Listings */}
-      <div className="container" style={{ padding: "36px 20px 60px" }}>
-        {loading ? (
-          <div className="pg-grid">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="skeleton" style={{ height: 300 }} />
-            ))}
-          </div>
-        ) : listings.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "80px 20px" }}>
-            <p style={{ fontSize: 60 }}>🏚️</p>
-            <h3 style={{ fontSize: 20, margin: "16px 0 8px" }}>No PGs in {cityLabel} yet</h3>
-            <p style={{ color: "var(--muted)" }}>Be the first to list your PG here!</p>
-            <Link to="/" className="btn btn-primary" style={{ marginTop: 20 }}>
-              Browse All PGs
-            </Link>
-          </div>
-        ) : (
-          <div className="pg-grid">
-            {listings.map(pg => (
-              <Link key={pg._id} to={`/pg/${pg.slug}`} className="pg-card">
-                {pg.photos?.length > 0 ? (
-                  <img src={pg.photos[0]} alt={pg.title} className="pg-card-img" loading="lazy" />
-                ) : (
-                  <div className="pg-card-img-placeholder">🏠</div>
-                )}
-                <div className="pg-card-body">
-                  <p className="pg-card-title">{pg.title}</p>
-                  <p className="pg-card-loc">📍 {pg.locality ? `${pg.locality}, ` : ""}{cityLabel}</p>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                    <div>
-                      <span className="pg-card-rent">₹{pg.rentFrom.toLocaleString()}</span>
-                      <span className="pg-card-rent"><span>/mo</span></span>
+      <section className="section">
+        <div className="container">
+          {loading ? (
+            <div className="pg-grid">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="skeleton" style={{ height: 300 }} />
+              ))}
+            </div>
+          ) : listings.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon"><IconHome /></div>
+              <div className="empty-title">No PGs listed in {cityLabel} yet</div>
+              <div className="empty-text">Check back soon or browse other cities.</div>
+              <Link to="/" className="empty-cta">Browse all PGs</Link>
+            </div>
+          ) : (
+            <div className="pg-grid">
+              {listings.map(pg => {
+                const cl = pg.city.charAt(0).toUpperCase() + pg.city.slice(1);
+                return (
+                  <Link key={pg._id} to={`/pg/${pg.slug}`} className="pg-card">
+                    {pg.photos?.length > 0 ? (
+                      <img src={pg.photos[0]} alt={pg.title} className="pg-card-img" loading="lazy" />
+                    ) : (
+                      <div className="pg-card-img-placeholder"><IconHome /></div>
+                    )}
+                    <div className="pg-card-body">
+                      <div className="pg-card-top">
+                        <h3 className="pg-card-title">{pg.title}</h3>
+                      </div>
+                      <div className="pg-card-loc">
+                        <IconPin />
+                        {pg.locality ? `${pg.locality}, ` : ""}{cl}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 12 }}>
+                        <span className="pg-card-price">₹{pg.rentFrom.toLocaleString()}</span>
+                        <span className="pg-card-price-unit">/month</span>
+                      </div>
+                      <div className="pg-card-tags">
+                        <span className={`tag ${GENDER_TAGS[pg.genderPreference]}`}>
+                          {GENDER_LABELS[pg.genderPreference]}
+                        </span>
+                        {pg.availableBeds > 0 ? (
+                          <span className="tag tag-green">
+                            <span className="avail-dot green" style={{ marginRight: 4 }} />
+                            {pg.availableBeds} beds available
+                          </span>
+                        ) : (
+                          <span className="tag tag-red">Fully occupied</span>
+                        )}
+                        {pg.foodIncluded && <span className="tag tag-amber">Meals included</span>}
+                      </div>
                     </div>
-                    <span className={`badge ${GENDER_BADGE[pg.genderPreference]}`}>{GENDER_LABELS[pg.genderPreference]}</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                    {pg.availableBeds > 0
-                      ? <span className="badge badge-green">✓ {pg.availableBeds} beds</span>
-                      : <span className="badge badge-red">✗ Full</span>}
-                    {pg.foodIncluded && <span className="badge badge-amber">🍽️</span>}
-                    {pg.acAvailable && <span className="badge badge-blue">❄️</span>}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 };
 
