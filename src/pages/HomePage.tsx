@@ -15,6 +15,7 @@ interface Listing {
   acAvailable: boolean;
   wifiAvailable: boolean;
   availableBeds: number;
+  totalBeds?: number;
   photos: string[];
   amenities: string[];
 }
@@ -92,13 +93,22 @@ const PGCard = ({ pg }: { pg: Listing }) => {
         </div>
         <div className="pg-card-tags">
           <span className={`tag ${GENDER_TAGS[pg.genderPreference]}`}>{GENDER_LABELS[pg.genderPreference]}</span>
-          {pg.availableBeds > 0 ? (
+          {pg.totalBeds !== undefined && pg.totalBeds > 0 ? (
+            pg.availableBeds > 0 ? (
+              <span className="tag tag-green">
+                <span className="avail-dot green" style={{ marginRight: 4 }} />
+                {pg.availableBeds} beds available
+              </span>
+            ) : (
+              <span className="tag tag-red">Fully occupied</span>
+            )
+          ) : pg.availableBeds > 0 ? (
             <span className="tag tag-green">
               <span className="avail-dot green" style={{ marginRight: 4 }} />
               {pg.availableBeds} beds available
             </span>
           ) : (
-            <span className="tag tag-red">Fully occupied</span>
+            <span className="tag tag-blue">Vacancies on request</span>
           )}
           {pg.foodIncluded && <span className="tag tag-amber">Meals included</span>}
           {pg.acAvailable && <span className="tag tag-gray">AC</span>}

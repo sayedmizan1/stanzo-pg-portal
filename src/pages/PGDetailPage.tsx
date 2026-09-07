@@ -193,13 +193,22 @@ const PGDetailPage = () => {
             {listing.pincode ? ` — ${listing.pincode}` : ""}
           </div>
           <div className="detail-tags">
-            {listing.availableBeds > 0 ? (
+            {listing.totalBeds > 0 ? (
+              listing.availableBeds > 0 ? (
+                <span className="tag tag-green">
+                  <span className="avail-dot green" style={{ marginRight: 4 }} />
+                  {listing.availableBeds} of {listing.totalBeds} beds available
+                </span>
+              ) : (
+                <span className="tag tag-red">Fully occupied</span>
+              )
+            ) : listing.availableBeds > 0 ? (
               <span className="tag tag-green">
                 <span className="avail-dot green" style={{ marginRight: 4 }} />
-                {listing.availableBeds} of {listing.totalBeds} beds available
+                {listing.availableBeds} beds available
               </span>
             ) : (
-              <span className="tag tag-red">Fully occupied</span>
+              <span className="tag tag-blue">Vacancies on request</span>
             )}
             <span className="tag tag-blue">{GENDER_LABEL[listing.genderPreference]}</span>
             <span className="tag tag-gray">{listing.views} views</span>
@@ -355,14 +364,18 @@ const PGDetailPage = () => {
 
           {/* Summary */}
           <div className="summary-card">
-            <div className="summary-row">
-              <span className="summary-key">Total beds</span>
-              <span className="summary-val">{listing.totalBeds}</span>
-            </div>
+            {listing.totalBeds > 0 && (
+              <div className="summary-row">
+                <span className="summary-key">Total beds</span>
+                <span className="summary-val">{listing.totalBeds}</span>
+              </div>
+            )}
             <div className="summary-row">
               <span className="summary-key">Available beds</span>
-              <span className="summary-val" style={{ color: listing.availableBeds > 0 ? "var(--green)" : "var(--red)" }}>
-                {listing.availableBeds}
+              <span className="summary-val" style={{ color: listing.availableBeds > 0 ? "var(--green)" : listing.totalBeds > 0 ? "var(--red)" : "var(--brand)" }}>
+                {listing.availableBeds > 0
+                  ? (listing.totalBeds > 0 ? `${listing.availableBeds} of ${listing.totalBeds}` : `${listing.availableBeds} beds`)
+                  : (listing.totalBeds > 0 ? "0 (Fully occupied)" : "Inquire with owner")}
               </span>
             </div>
             <div className="summary-row">
