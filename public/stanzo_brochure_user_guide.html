@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stanzo — Grow Your PG Business Brochure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-family: 'Inter', sans-serif; color: #1e293b; background: #fff; line-height: 1.6; }
+
+    @media print {
+      html { font-size: 12px; }
+      .no-print { display: none !important; }
+      .page-break { page-break-after: always; break-after: page; }
+      @page { margin: 0; size: A4; }
+    }
+
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-deep: #1e3a8a;
+      --navy: #0f172a;
+      --slate: #1e293b;
+      --mid: #475569;
+      --light: #94a3b8;
+      --emerald: #10b981;
+      --emerald-dk: #059669;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+    }
+
+    /* =============================================
+       COVER PAGE
+    ============================================= */
+    .cover {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #0a0f1e 0%, #0f172a 40%, #1e3a8a 80%, #1d4ed8 100%);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-glow-1 {
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 65%);
+      top: -150px; right: -150px;
+      pointer-events: none;
+    }
+    .cover-glow-2 {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(16,185,129,0.2) 0%, transparent 65%);
+      bottom: -100px; left: 0;
+      pointer-events: none;
+    }
+    .cover-top {
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-logo {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #fff;
+    }
+    .cover-logo span { color: #60a5fa; }
+    .cover-top-right {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: right;
+      line-height: 1.5;
+    }
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 3rem 3rem;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.35);
+      color: #34d399;
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+    .cover-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      max-width: 680px;
+    }
+    .cover-headline em {
+      font-style: italic;
+      color: #60a5fa;
+    }
+    .cover-sub {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+    .cover-sub strong { color: #cbd5e1; }
+    .cover-targets {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+    .cover-target {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 12px 20px;
+      backdrop-filter: blur(8px);
+    }
+    .cover-target-icon { font-size: 1.4rem; }
+    .cover-target-text { }
+    .cover-target-text strong { color: #e2e8f0; font-size: 0.9rem; display: block; }
+    .cover-target-text span { color: #64748b; font-size: 0.75rem; }
+    .cover-bottom-bar {
+      background: rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-stat { text-align: center; }
+    .cover-stat-num { font-size: 2rem; font-weight: 900; color: #fff; display: block; line-height: 1; }
+    .cover-stat-lbl { font-size: 0.68rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+    .cover-stat-div { width: 1px; height: 48px; background: rgba(255,255,255,0.1); }
+
+    /* =============================================
+       SHARED SECTION STYLES
+    ============================================= */
+    .page { max-width: 900px; margin: 0 auto; padding: 5rem 3rem; }
+    .page-wide { max-width: 100%; padding: 5rem 3rem; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #eff6ff; color: var(--blue);
+      border-radius: 999px; padding: 5px 16px;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .eyebrow.green { background: #ecfdf5; color: var(--emerald); }
+    .eyebrow.amber { background: #fffbeb; color: #92400e; }
+    .eyebrow.white { background: rgba(255,255,255,0.15); color: #fff; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+    }
+    .section-title.white { color: #fff; }
+    .section-desc { font-size: 1rem; color: var(--mid); max-width: 640px; line-height: 1.8; margin-bottom: 3rem; }
+    .section-desc.white { color: #94a3b8; }
+    hr.rule { border: none; border-top: 2px solid var(--border); margin-bottom: 3rem; }
+
+    /* =============================================
+       PAIN POINT SECTION (dark bg)
+    ============================================= */
+    .pain-section {
+      background: var(--navy);
+      padding: 5rem 3rem;
+    }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .pain-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 1.8rem;
+    }
+    .pain-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .pain-card h3 { font-size: 0.95rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.5rem; }
+    .pain-card p { font-size: 0.82rem; color: #64748b; line-height: 1.6; }
+
+    /* =============================================
+       SOLUTION FEATURES
+    ============================================= */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .feat {
+      display: flex;
+      gap: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+    .feat-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .bg-blue { background: #eff6ff; }
+    .bg-green { background: #ecfdf5; }
+    .bg-amber { background: #fffbeb; }
+    .bg-purple { background: #f3f0ff; }
+    .bg-rose { background: #fff1f2; }
+    .feat-body h3 { font-size: 0.92rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+    .feat-body p { font-size: 0.8rem; color: var(--mid); line-height: 1.6; }
+
+    /* =============================================
+       MODULE FULL LIST
+    ============================================= */
+    .module-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .mod {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      border-left: 3px solid var(--blue);
+      padding: 1rem 1.2rem;
+      background: var(--bg);
+      border-radius: 0 10px 10px 0;
+    }
+    .mod.g { border-left-color: var(--emerald); }
+    .mod.a { border-left-color: var(--amber); }
+    .mod.r { border-left-color: var(--rose); }
+    .mod-icon { font-size: 1.3rem; margin-top: 2px; }
+    .mod h3 { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+    .mod p { font-size: 0.78rem; color: var(--mid); line-height: 1.5; margin-top: 2px; }
+
+    /* =============================================
+       PG PORTAL BENEFIT (gradient bg)
+    ============================================= */
+    .portal-section {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      padding: 5rem 3rem;
+    }
+    .portal-inner { max-width: 900px; margin: 0 auto; }
+    .portal-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+    }
+    .portal-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .portal-card-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .portal-card h3 { font-size: 0.88rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.4rem; }
+    .portal-card p { font-size: 0.78rem; color: #64748b; line-height: 1.5; }
+
+    /* =============================================
+       ROI SECTION
+    ============================================= */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .roi-card {
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border: 2px solid var(--border);
+    }
+    .roi-card.blue { background: #eff6ff; border-color: #bfdbfe; }
+    .roi-card.green { background: #ecfdf5; border-color: #a7f3d0; }
+    .roi-card.amber { background: #fffbeb; border-color: #fde68a; }
+    .roi-num { font-size: 2.8rem; font-weight: 900; line-height: 1; margin-bottom: 0.4rem; }
+    .roi-card.blue .roi-num { color: var(--blue); }
+    .roi-card.green .roi-num { color: var(--emerald-dk); }
+    .roi-card.amber .roi-num { color: #d97706; }
+    .roi-label { font-size: 0.82rem; font-weight: 600; color: var(--navy); margin-bottom: 0.3rem; }
+    .roi-desc { font-size: 0.75rem; color: var(--mid); line-height: 1.5; }
+
+    /* =============================================
+       COMPARISON TABLE
+    ============================================= */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 2.5rem; }
+    .compare-table th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .compare-table th:first-child { color: var(--mid); background: var(--bg); border-radius: 10px 0 0 10px; }
+    .compare-table th:nth-child(2) { background: #fee2e2; color: #991b1b; text-align: center; }
+    .compare-table th:nth-child(3) { background: var(--blue); color: #fff; text-align: center; border-radius: 0 10px 10px 0; }
+    .compare-table td { padding: 12px 20px; border-bottom: 1px solid var(--border); }
+    .compare-table td:nth-child(2) { text-align: center; background: #fff5f5; color: #991b1b; }
+    .compare-table td:nth-child(3) { text-align: center; background: #f0f9ff; color: #065f46; font-weight: 600; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .x-mark { color: #ef4444; font-size: 1.1rem; font-weight: 900; }
+    .check-mark { color: var(--emerald); font-size: 1.1rem; font-weight: 900; }
+
+    /* =============================================
+       PRICING TABLE
+    ============================================= */
+    .pricing-section {
+      background: var(--bg);
+      padding: 5rem 3rem;
+    }
+    .pricing-inner { max-width: 900px; margin: 0 auto; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .pc {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: 2.2rem 1.8rem;
+      text-align: center;
+      position: relative;
+    }
+    .pc.featured {
+      border-color: var(--blue);
+      background: linear-gradient(160deg, #eff6ff 0%, #fff 60%);
+      box-shadow: 0 20px 60px rgba(37,99,235,0.12);
+      transform: scale(1.03);
+    }
+    .popular-tag {
+      position: absolute;
+      top: -15px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--blue);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 999px;
+    }
+    .pc-plan { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--light); margin-bottom: 0.6rem; }
+    .pc-price { font-size: 3rem; font-weight: 900; color: var(--navy); line-height: 1; }
+    .pc-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 0.5rem; }
+    .pc-price sub { font-size: 0.9rem; color: var(--light); font-weight: 500; }
+    .pc-period { font-size: 0.75rem; color: var(--light); margin-bottom: 1.8rem; }
+    .pc-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .pc-features { list-style: none; text-align: left; margin-bottom: 1.5rem; }
+    .pc-features li {
+      font-size: 0.83rem;
+      color: var(--slate);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pc-features li:last-child { border-bottom: none; }
+    .pc-features li::before { content: '✓'; color: var(--emerald); font-weight: 900; font-size: 0.9rem; }
+    .pc-btn {
+      display: block;
+      padding: 12px 0;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid;
+      text-decoration: none;
+    }
+    .pc-btn.outline { color: var(--blue); border-color: var(--blue); background: transparent; }
+    .pc-btn.filled { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .pc-btn.dark { color: #fff; background: var(--navy); border-color: var(--navy); }
+
+    /* =============================================
+       TESTIMONIALS
+    ============================================= */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .testi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+    }
+    .testi-stars { color: #f59e0b; font-size: 1rem; margin-bottom: 0.8rem; letter-spacing: 2px; }
+    .testi-text { font-size: 0.88rem; color: var(--slate); line-height: 1.7; font-style: italic; margin-bottom: 1.2rem; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .testi-name { font-size: 0.85rem; font-weight: 700; color: var(--navy); }
+    .testi-role { font-size: 0.75rem; color: var(--light); }
+
+    /* =============================================
+       STEPS
+    ============================================= */
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--emerald));
+    }
+    .step-box { text-align: center; position: relative; }
+    .step-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.3rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 8px 24px rgba(37,99,235,0.35);
+      position: relative;
+      z-index: 1;
+    }
+    .step-box h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+    .step-box p { font-size: 0.8rem; color: var(--mid); line-height: 1.6; }
+
+    /* =============================================
+       BACK COVER (dark)
+    ============================================= */
+    .back-cover {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #0a0f1e 0%, #0f172a 50%, #1e3a8a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .back-cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,0.25) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+    .bc-logo { font-size: 3.5rem; font-weight: 900; letter-spacing: -1.5px; color: #fff; margin-bottom: 0.3rem; }
+    .bc-logo span { color: #60a5fa; }
+    .bc-sub { color: #64748b; margin-bottom: 2rem; font-size: 0.9rem; }
+    .bc-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      max-width: 600px;
+      line-height: 1.25;
+    }
+    .bc-desc { color: #94a3b8; font-size: 0.95rem; max-width: 480px; margin: 0 auto 3rem; line-height: 1.7; }
+    .bc-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3.5rem; }
+    .bc-btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: #fff;
+      padding: 15px 36px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.4);
+    }
+    .bc-btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: #e2e8f0;
+      padding: 15px 36px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+    }
+    .bc-contacts {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .bc-contact-item { text-align: center; }
+    .bc-contact-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .bc-contact-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; font-weight: 700; margin-bottom: 0.2rem; }
+    .bc-contact-value { color: #94a3b8; font-size: 0.88rem; font-weight: 600; }
+    .bc-legal { color: #334155; font-size: 0.72rem; line-height: 1.8; }
+
+    /* =============================================
+       UTILITY
+    ============================================= */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; }
+    .badge-green { background: #ecfdf5; color: var(--emerald-dk); }
+    .badge-blue { background: #eff6ff; color: var(--blue); }
+    .highlight {
+      background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+      border: 1px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .highlight h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .highlight p { font-size: 0.86rem; color: var(--mid); line-height: 1.7; }
+    .url-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--navy); color: #7dd3fc;
+      border-radius: 8px; padding: 5px 12px;
+      font-family: monospace; font-size: 0.85rem; font-weight: 600;
+    }
+    .page-num {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--light);
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     COVER PAGE
+================================================================ -->
+<div class="cover page-break">
+  <div class="cover-glow-1"></div>
+  <div class="cover-glow-2"></div>
+
+  <div class="cover-top">
+    <div class="cover-logo">stan<span>zo</span></div>
+    <div class="cover-top-right">
+      Official Product Brochure<br/>
+      Version 1.0 · 2025
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-eyebrow">🚀 Built for India's PG &amp; Hostel Industry</div>
+
+    <h1 class="cover-headline">
+      Stop Managing Your<br/>
+      <em>PG the Old Way.</em><br/>
+      Go Digital with Stanzo.
+    </h1>
+
+    <p class="cover-sub">
+      Stanzo is India's smartest PG management SaaS platform. 
+      <strong>Manage rooms, collect rent digitally, attract new tenants automatically</strong> — 
+      all from one simple dashboard on your phone or laptop.
+    </p>
+
+    <div class="cover-targets">
+      <div class="cover-target">
+        <div class="cover-target-icon">🏠</div>
+        <div class="cover-target-text">
+          <strong>PG Owners</strong>
+          <span>Single or multi-property</span>
+        </div>
+      </div>
+      <div class="cover-target">
+        <div class="cover-target-icon">🏨</div>
+        <div class="cover-target-text">
+          <strong>Hostel Owners</strong>
+          <span>Boys, girls, or co-ed</span>
+        </div>
+      </div>
+      <div class="cover-target">
+        <div class="cover-target-icon">🏢</div>
+        <div class="cover-target-text">
+          <strong>Apartment Managers</strong>
+          <span>Serviced &amp; co-living spaces</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-bottom-bar">
+    <div class="cover-stat">
+      <span class="cover-stat-num">20+</span>
+      <div class="cover-stat-lbl">Management Tools</div>
+    </div>
+    <div class="cover-stat-div"></div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">₹999</span>
+      <div class="cover-stat-lbl">Starting/Month</div>
+    </div>
+    <div class="cover-stat-div"></div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">24/7</span>
+      <div class="cover-stat-lbl">Access Anywhere</div>
+    </div>
+    <div class="cover-stat-div"></div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">🌐</span>
+      <div class="cover-stat-lbl">stanzo.in</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE 2: THE PROBLEM
+================================================================ -->
+<div class="pain-section page-break">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <div class="eyebrow white">😤 The Problem</div>
+    <h2 class="section-title white" style="margin-bottom: 0.8rem;">Running a PG Without Software<br/>is Costing You Money</h2>
+    <p class="section-desc white" style="margin-bottom: 3rem;">Every PG owner running on WhatsApp groups, Excel sheets, and verbal agreements is losing thousands of rupees every month. Sound familiar?</p>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">📋</div>
+        <h3>Rent Tracking Chaos</h3>
+        <p>You maintain rent in notebooks or Excel — entries get missed, defaulters go unnoticed for weeks, and there's no record for disputes.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📭</div>
+        <h3>Empty Beds, Zero Leads</h3>
+        <p>Your PG has empty rooms but no way to market it. You depend entirely on word-of-mouth. New tenants are hard to find and beds stay vacant.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">💬</div>
+        <h3>WhatsApp Group Madness</h3>
+        <p>Tenant complaints, maintenance requests, and announcements all mixed in a single WhatsApp group — unorganized, untracked, unprofessional.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🧾</div>
+        <h3>No Idea of Profitability</h3>
+        <p>You collect rent but don't track expenses properly. At month-end you have no clear picture of what you actually earned versus spent.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📁</div>
+        <h3>Paper Tenant Records</h3>
+        <p>Tenant IDs, agreements, and contact details are on paper or scattered in phone notes. Getting any info requires searching through files.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">👷</div>
+        <h3>Staff Not Accountable</h3>
+        <p>You have cooks, wardens, or housekeeping staff but no system to track their attendance, assign tasks, or manage their payroll properly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE 3: THE SOLUTION (What Stanzo Does)
+================================================================ -->
+<div class="page page-break">
+  <div class="eyebrow green">✅ The Solution</div>
+  <h2 class="section-title">One Platform. Every Tool<br/>Your PG Business Needs.</h2>
+  <p class="section-desc">
+    Stanzo replaces every notebook, spreadsheet, and WhatsApp group with a single, powerful, beautifully simple dashboard — accessible from your phone or laptop, anywhere, anytime.
+  </p>
+
+  <div class="feature-row">
+    <div class="feat">
+      <div class="feat-icon bg-blue">💰</div>
+      <div class="feat-body">
+        <h3>Digital Rent Collection & Tracking</h3>
+        <p>Every tenant's rent is tracked automatically. Know exactly who has paid, who hasn't, and how much is due — updated live every month.</p>
+      </div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon bg-green">🌐</div>
+      <div class="feat-body">
+        <h3>Automatic Lead Generation</h3>
+        <p>Your PG gets its own listing page on <strong>stay.stanzo.in</strong> — India's PG discovery portal. New tenant inquiries land in your inbox automatically.</p>
+      </div>
+    </div>
+  </div>
+  <div class="feature-row">
+    <div class="feat">
+      <div class="feat-icon bg-amber">👥</div>
+      <div class="feat-body">
+        <h3>Complete Tenant Management</h3>
+        <p>Onboard tenants with ID proof, track check-in/check-out, manage notices, and maintain complete records — all searchable in seconds.</p>
+      </div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon bg-purple">📊</div>
+      <div class="feat-body">
+        <h3>Profit & Expense Dashboard</h3>
+        <p>See your monthly revenue, expenses, and net profit in one chart. Know exactly how much your PG earns — every single month.</p>
+      </div>
+    </div>
+  </div>
+  <div class="feature-row">
+    <div class="feat">
+      <div class="feat-icon bg-rose">📋</div>
+      <div class="feat-body">
+        <h3>Complaints & Maintenance</h3>
+        <p>Tenants raise issues formally through the system. You see all complaints in a structured list, assign them, and track resolution.</p>
+      </div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon bg-green">👔</div>
+      <div class="feat-body">
+        <h3>Staff & Payroll Management</h3>
+        <p>Add housekeeping, cooks, wardens, and security. Assign them to properties, manage their roles, and track payroll with full accountability.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">Page 3 — Stanzo B2B Sales Brochure · stanzo.in</div>
+</div>
+
+<!-- ================================================================
+     PAGE 4: FULL MODULE LIST
+================================================================ -->
+<div class="page page-break">
+  <div class="eyebrow">📦 All Modules</div>
+  <h2 class="section-title">Everything Included in<br/>Your Stanzo Subscription</h2>
+  <p class="section-desc">Every module below is included in your Stanzo plan. No extra charges, no hidden fees.</p>
+
+  <div class="module-cols">
+    <div class="mod">
+      <div class="mod-icon">📊</div>
+      <div>
+        <h3>Live Business Dashboard</h3>
+        <p>Real-time overview — revenue, occupancy, dues, and tenant activity at a glance.</p>
+      </div>
+    </div>
+    <div class="mod g">
+      <div class="mod-icon">🏠</div>
+      <div>
+        <h3>Property Management</h3>
+        <p>Add multiple properties with photos, address, amenities, and rules.</p>
+      </div>
+    </div>
+    <div class="mod a">
+      <div class="mod-icon">🛏️</div>
+      <div>
+        <h3>Rooms & Bed Tracking</h3>
+        <p>Configure room types, bed count, pricing, and live availability per room.</p>
+      </div>
+    </div>
+    <div class="mod r">
+      <div class="mod-icon">👤</div>
+      <div>
+        <h3>Tenant Onboarding</h3>
+        <p>Digital tenant profiles with ID proof, check-in date, and room assignment.</p>
+      </div>
+    </div>
+    <div class="mod">
+      <div class="mod-icon">💳</div>
+      <div>
+        <h3>Rent & Payment Tracking</h3>
+        <p>Track monthly dues, mark receipts, view defaulters, send reminders.</p>
+      </div>
+    </div>
+    <div class="mod g">
+      <div class="mod-icon">💸</div>
+      <div>
+        <h3>Expense Logging</h3>
+        <p>Record electricity, water, groceries, repairs — categorized, monthly totals.</p>
+      </div>
+    </div>
+    <div class="mod a">
+      <div class="mod-icon">📈</div>
+      <div>
+        <h3>Profit Dashboard</h3>
+        <p>Visual income vs. expense charts. Know your exact net profit each month.</p>
+      </div>
+    </div>
+    <div class="mod r">
+      <div class="mod-icon">📥</div>
+      <div>
+        <h3>Leads Inbox</h3>
+        <p>Tenant inquiries from stay.stanzo.in land directly in your inbox.</p>
+      </div>
+    </div>
+    <div class="mod">
+      <div class="mod-icon">🔔</div>
+      <div>
+        <h3>Tenant Notifications</h3>
+        <p>Send announcements, alerts, or reminders to all or specific tenants.</p>
+      </div>
+    </div>
+    <div class="mod g">
+      <div class="mod-icon">🔧</div>
+      <div>
+        <h3>Complaints & Requests</h3>
+        <p>Tenants raise and track maintenance requests. You manage resolution.</p>
+      </div>
+    </div>
+    <div class="mod a">
+      <div class="mod-icon">⚡</div>
+      <div>
+        <h3>Utility Bill Management</h3>
+        <p>Upload electricity/water bills, assign costs to tenants, track payments.</p>
+      </div>
+    </div>
+    <div class="mod r">
+      <div class="mod-icon">👔</div>
+      <div>
+        <h3>Staff Management</h3>
+        <p>Add staff, assign to property, track roles and payroll accountability.</p>
+      </div>
+    </div>
+    <div class="mod">
+      <div class="mod-icon">📂</div>
+      <div>
+        <h3>PG Listing Control</h3>
+        <p>Manage your public listing on stay.stanzo.in — photos, pricing, visibility.</p>
+      </div>
+    </div>
+    <div class="mod g">
+      <div class="mod-icon">📤</div>
+      <div>
+        <h3>Data Export</h3>
+        <p>Export rent records and tenant data to CSV for your accountant.</p>
+      </div>
+    </div>
+    <div class="mod a">
+      <div class="mod-icon">🕐</div>
+      <div>
+        <h3>Activity Audit Logs</h3>
+        <p>Full timestamped history of every action in your dashboard.</p>
+      </div>
+    </div>
+    <div class="mod r">
+      <div class="mod-icon">📱</div>
+      <div>
+        <h3>Mobile Optimized</h3>
+        <p>Manage everything from your phone — iOS or Android, any browser.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">Page 4 — Stanzo B2B Sales Brochure · stanzo.in</div>
+</div>
+
+<!-- ================================================================
+     PAGE 5: PG PORTAL BENEFIT
+================================================================ -->
+<div class="portal-section page-break">
+  <div class="portal-inner">
+    <div class="eyebrow white">🌐 Automatic Lead Generation</div>
+    <h2 class="section-title white">Your PG Gets Its Own Listing<br/>on India's PG Discovery Portal</h2>
+    <p class="section-desc white">
+      Every Stanzo subscriber gets their property published on <strong style="color:#e2e8f0">stay.stanzo.in</strong> — a dedicated PG discovery portal where thousands of tenants search for their next home every day. You don't need to run ads, post on OLX, or depend on brokers anymore.
+    </p>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <span class="url-chip" style="font-size:1rem; padding: 10px 20px;">🔍 stay.stanzo.in</span>
+    </div>
+
+    <div class="portal-cards">
+      <div class="portal-card">
+        <div class="portal-card-icon">🏙️</div>
+        <h3>City-Based Discovery</h3>
+        <p>Tenants search by city — Bangalore, Pune, Mumbai, Delhi, Gurgaon. Your PG appears instantly in results.</p>
+      </div>
+      <div class="portal-card">
+        <div class="portal-card-icon">📸</div>
+        <h3>Beautiful PG Profile Page</h3>
+        <p>Your PG gets its own URL with photo gallery, amenities, pricing, availability, and your contact details.</p>
+      </div>
+      <div class="portal-card">
+        <div class="portal-card-icon">💬</div>
+        <h3>Direct WhatsApp Inquiries</h3>
+        <p>Tenants click "Chat on WhatsApp" and message you directly — no middlemen, no broker fees.</p>
+      </div>
+      <div class="portal-card">
+        <div class="portal-card-icon">✅</div>
+        <h3>Stanzo Assured Badge</h3>
+        <p>Verified PGs receive a trust badge — tenants prefer "Stanzo Assured" listings over unverified competitors.</p>
+      </div>
+      <div class="portal-card">
+        <div class="portal-card-icon">🔎</div>
+        <h3>Smart Filters</h3>
+        <p>Tenants filter by Boys / Girls / Co-Living, price range, and amenities — only the most relevant leads reach you.</p>
+      </div>
+      <div class="portal-card">
+        <div class="portal-card-icon">📲</div>
+        <h3>Mobile-First Experience</h3>
+        <p>Most tenant searches happen on mobile. stay.stanzo.in is fully optimized for a seamless mobile experience.</p>
+      </div>
+    </div>
+
+    <div style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); border-radius:16px; padding:1.8rem 2.5rem; margin-top:2rem; text-align:center;">
+      <p style="color:#34d399; font-size:1rem; font-weight:700; margin-bottom:0.5rem;">💡 No More Brokers. No More OLX. No More Empty Beds.</p>
+      <p style="color:#64748b; font-size:0.85rem;">Tenant leads flow automatically into your Stanzo Leads Inbox — from the portal directly to you.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE 6: ROI & COMPARISON
+================================================================ -->
+<div class="page page-break">
+  <div class="eyebrow amber">💰 Return on Investment</div>
+  <h2 class="section-title">Stanzo Pays for Itself in<br/>Less Than One Empty Bed</h2>
+  <p class="section-desc">A single vacant bed costs you ₹6,000–₹15,000 per month in lost rent. Stanzo fills those beds faster and saves hours of manual work — it pays for itself immediately.</p>
+
+  <div class="roi-grid">
+    <div class="roi-card blue">
+      <div class="roi-num">5 hrs</div>
+      <div class="roi-label">Saved Per Week</div>
+      <div class="roi-desc">No more manual rent registers, WhatsApp chasing, or paper record searching.</div>
+    </div>
+    <div class="roi-card green">
+      <div class="roi-num">2–3x</div>
+      <div class="roi-label">Faster Tenant Acquisition</div>
+      <div class="roi-desc">Your listing on stay.stanzo.in attracts tenants searching online — beds fill faster.</div>
+    </div>
+    <div class="roi-card amber">
+      <div class="roi-num">₹0</div>
+      <div class="roi-label">Broker Fees Saved</div>
+      <div class="roi-desc">Direct WhatsApp inquiries from your portal listing — no broker, no commission.</div>
+    </div>
+  </div>
+
+  <hr class="rule" />
+
+  <div class="eyebrow">📊 Side-by-Side Comparison</div>
+  <h3 style="font-size:1.4rem; font-weight:700; color:var(--navy); margin-bottom:1.5rem;">Without Stanzo vs. With Stanzo</h3>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>❌ Old Way (Manual)</th>
+        <th>✅ With Stanzo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Track who paid rent this month</td>
+        <td><span class="x-mark">✗</span> Excel / notebook, errors common</td>
+        <td><span class="check-mark">✓</span> Auto-tracked, color-coded dashboard</td>
+      </tr>
+      <tr>
+        <td>Find a new tenant when bed is empty</td>
+        <td><span class="x-mark">✗</span> OLX + broker fee (₹3,000–10,000)</td>
+        <td><span class="check-mark">✓</span> Auto-listed on stay.stanzo.in, free leads</td>
+      </tr>
+      <tr>
+        <td>Handle tenant complaint</td>
+        <td><span class="x-mark">✗</span> WhatsApp message, often forgotten</td>
+        <td><span class="check-mark">✓</span> Formal ticket, tracked, resolved, logged</td>
+      </tr>
+      <tr>
+        <td>Know monthly profit</td>
+        <td><span class="x-mark">✗</span> Manual calculation, often skipped</td>
+        <td><span class="check-mark">✓</span> Live profit chart with expense breakdown</td>
+      </tr>
+      <tr>
+        <td>Access tenant documents</td>
+        <td><span class="x-mark">✗</span> Paper files, hard to find</td>
+        <td><span class="check-mark">✓</span> Digital profiles, searchable in seconds</td>
+      </tr>
+      <tr>
+        <td>Send rent reminders</td>
+        <td><span class="x-mark">✗</span> Manual WhatsApp messages, awkward</td>
+        <td><span class="check-mark">✓</span> In-app notifications sent in one click</td>
+      </tr>
+      <tr>
+        <td>Track electricity bills per tenant</td>
+        <td><span class="x-mark">✗</span> Estimated, disputes common</td>
+        <td><span class="check-mark">✓</span> Uploaded bills, assigned per unit, trackable</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-num">Page 6 — Stanzo B2B Sales Brochure · stanzo.in</div>
+</div>
+
+<!-- ================================================================
+     PAGE 7: PRICING PLANS
+================================================================ -->
+<div class="pricing-section page-break">
+  <div class="pricing-inner">
+    <div class="eyebrow" style="margin-bottom:1.2rem;">💎 Subscription Plans</div>
+    <h2 class="section-title" style="margin-bottom:0.8rem;">Simple, Transparent Pricing.<br/>No Hidden Charges.</h2>
+    <p class="section-desc" style="margin-bottom:3.5rem;">Choose the plan that fits your PG size. Start free, upgrade anytime. Cancel whenever you want.</p>
+
+    <div class="pricing-grid">
+      <!-- STARTER -->
+      <div class="pc">
+        <div class="pc-plan">Starter</div>
+        <div class="pc-price" style="font-size:2rem; padding-top:0.5rem;">15 Days</div>
+        <div class="pc-period">Free Trial · Then ₹999/month</div>
+        <hr class="pc-divider" />
+        <ul class="pc-features">
+          <li>1 Property location</li>
+          <li>Up to 30 Residents</li>
+          <li>Rent Tracking</li>
+          <li>Basic Dashboard</li>
+          <li>PG Listing on Portal</li>
+          <li>Email Support</li>
+        </ul>
+        <a href="https://stanzo.in/register" class="pc-btn outline">Start Free Trial →</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="pc featured">
+        <div class="popular-tag">⭐ Most Popular</div>
+        <div class="pc-plan">Professional</div>
+        <div class="pc-price"><sup>₹</sup>999<sub>/mo</sub></div>
+        <div class="pc-period">Per month · Cancel anytime</div>
+        <hr class="pc-divider" />
+        <ul class="pc-features">
+          <li>Up to 5 Properties</li>
+          <li>Unlimited Tenants</li>
+          <li>Full Analytics & Profit Charts</li>
+          <li>Expense Tracking</li>
+          <li>Leads Inbox (portal inquiries)</li>
+          <li>Staff Management</li>
+          <li>Utility Bill Tracking</li>
+          <li>Complaints & Requests Module</li>
+          <li>Data Export to CSV</li>
+          <li>Priority Email & Chat Support</li>
+        </ul>
+        <a href="https://stanzo.in/register" class="pc-btn filled">Start 15-Day Free Trial →</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="pc">
+        <div class="pc-plan">Enterprise</div>
+        <div class="pc-price" style="font-size:2rem; padding-top:0.5rem;">Custom</div>
+        <div class="pc-period">For chains, hostels &amp; large portfolios</div>
+        <hr class="pc-divider" />
+        <ul class="pc-features">
+          <li>Unlimited Properties</li>
+          <li>Unlimited Tenants & Staff</li>
+          <li>White-label Dashboard</li>
+          <li>Custom Branding</li>
+          <li>Dedicated Account Manager</li>
+          <li>API Access</li>
+          <li>Custom Reporting</li>
+          <li>SLA Guarantee</li>
+          <li>On-site Training</li>
+          <li>Phone Support (24/7)</li>
+        </ul>
+        <a href="mailto:support@stanzo.in" class="pc-btn dark">Contact Us for Quote →</a>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:2px solid #bfdbfe; border-radius:16px; padding:1.5rem 2rem; text-align:center; margin-top:0.5rem;">
+      <p style="color:var(--blue); font-weight:700; font-size:0.95rem; margin-bottom:0.4rem;">🎁 All Plans Include a 15-Day Free Trial</p>
+      <p style="color:var(--mid); font-size:0.82rem;">No credit card required to start. Try the full platform free for 15 days, then subscribe to keep going. No hidden fees.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE 8: SOCIAL PROOF + HOW TO START
+================================================================ -->
+<div class="page page-break">
+  <div class="eyebrow">💬 What Owners Are Saying</div>
+  <h2 class="section-title" style="margin-bottom:2.5rem;">PG Owners Love Stanzo</h2>
+
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Before Stanzo I used to maintain rent in a register and chase people on WhatsApp. Now everything is on the app and I can see who hasn't paid in two clicks. My stress has gone down by 80%."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">RK</div>
+        <div>
+          <div class="testi-name">Ramesh Kumar</div>
+          <div class="testi-role">PG Owner · 45 Beds · Bangalore</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"I had 8 empty beds for almost 2 months. The moment I listed on stay.stanzo.in, I got 3 WhatsApp inquiries in the first week. All 8 beds were filled within a month. This is gold."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:var(--emerald);">PM</div>
+        <div>
+          <div class="testi-name">Priya Mehta</div>
+          <div class="testi-role">Hostel Owner · 80 Beds · Pune</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"The profit dashboard is the best feature for me. I never knew my actual monthly profit before Stanzo. Now I track every expense and I've saved ₹15,000 a month just by identifying where money was leaking."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:var(--amber); color: var(--navy);">AS</div>
+        <div>
+          <div class="testi-name">Anjali Sharma</div>
+          <div class="testi-role">Apartment Manager · 3 Properties · Mumbai</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"My tenants used to call me at midnight for small complaints. Now they raise it in the app, I see it in the morning, and assign it to the caretaker. Professional, organized, zero headache."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:var(--purple, #8b5cf6);">VR</div>
+        <div>
+          <div class="testi-name">Vijay Rao</div>
+          <div class="testi-role">PG &amp; Hostel Owner · 120 Beds · Hyderabad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule" />
+
+  <div class="eyebrow green">🚀 Getting Started</div>
+  <h2 class="section-title" style="font-size:1.8rem; margin-bottom:2.5rem;">Live in 10 Minutes. Seriously.</h2>
+
+  <div class="steps-row">
+    <div class="step-box">
+      <div class="step-circle">1</div>
+      <h3>Create Free Account</h3>
+      <p>Visit <strong>stanzo.in</strong> and sign up in 60 seconds with just your email. No credit card required to start.</p>
+    </div>
+    <div class="step-box">
+      <div class="step-circle">2</div>
+      <h3>Add Your Property</h3>
+      <p>Add your PG name, address, room types, and photos. Your listing goes live on <strong>stay.stanzo.in</strong> automatically.</p>
+    </div>
+    <div class="step-box">
+      <div class="step-circle">3</div>
+      <h3>Manage Everything</h3>
+      <p>Add your tenants, set rents, collect payments, and watch leads arrive — from your phone or laptop, anywhere.</p>
+    </div>
+  </div>
+
+  <div class="highlight" style="text-align:center;">
+    <h3 style="font-size:1.1rem; margin-bottom:0.5rem;">🎯 Ready to Get Started?</h3>
+    <p>Join now at <span class="url-chip">stanzo.in</span> &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Free plan available &nbsp;·&nbsp; Setup in 10 minutes</p>
+  </div>
+
+  <div class="page-num">Page 8 — Stanzo B2B Sales Brochure · stanzo.in</div>
+</div>
+
+<!-- ================================================================
+     BACK COVER
+================================================================ -->
+<div class="back-cover">
+  <div style="position:relative; z-index:2; width:100%;">
+    <div class="bc-logo">stan<span>zo</span></div>
+    <p class="bc-sub">Smart PG Management · Made in India 🇮🇳</p>
+
+    <div style="width:60px; height:3px; background:linear-gradient(90deg,#2563eb,#10b981); border-radius:2px; margin:0 auto 2.5rem;"></div>
+
+    <h2 class="bc-headline">
+      Your PG Business Deserves<br/>Better Than a Notebook.
+    </h2>
+    <p class="bc-desc">
+      Hundreds of PG owners across India are managing smarter, earning more, and filling beds faster with Stanzo. It's your turn.
+    </p>
+
+    <div class="bc-actions">
+      <button class="bc-btn-primary" onclick="window.open('https://stanzo.in/register')">🚀 Start Free at stanzo.in</button>
+      <button class="bc-btn-secondary" onclick="window.open('mailto:support@stanzo.in')">📧 Talk to Our Team</button>
+    </div>
+
+    <div class="bc-contacts">
+      <div class="bc-contact-item">
+        <div class="bc-contact-icon">🌐</div>
+        <div class="bc-contact-label">Dashboard</div>
+        <div class="bc-contact-value">stanzo.in</div>
+      </div>
+      <div class="bc-contact-item">
+        <div class="bc-contact-icon">🔍</div>
+        <div class="bc-contact-label">PG Portal</div>
+        <div class="bc-contact-value">stay.stanzo.in</div>
+      </div>
+      <div class="bc-contact-item">
+        <div class="bc-contact-icon">📧</div>
+        <div class="bc-contact-label">Email</div>
+        <div class="bc-contact-value">support@stanzo.in</div>
+      </div>
+      <div class="bc-contact-item">
+        <div class="bc-contact-icon">💬</div>
+        <div class="bc-contact-label">WhatsApp</div>
+        <div class="bc-contact-value">Chat via stanzo.in</div>
+      </div>
+    </div>
+
+    <p class="bc-legal">
+      © 2025 Stanzo Technologies Pvt. Ltd. All rights reserved.<br/>
+      This brochure is for informational purposes. Pricing subject to change.<br/>
+      <strong style="color:#475569;">stanzo.in · Version 1.0 · September 2025</strong>
+    </p>
+  </div>
+</div>
+
+<!-- PRINT BUTTON -->
+<div class="no-print" style="position:fixed; bottom:2rem; right:2rem; z-index:9999;">
+  <button onclick="window.print()" style="
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:#fff; border:none; border-radius:999px;
+    padding:14px 28px; font-family:'Inter',sans-serif;
+    font-size:0.9rem; font-weight:700; cursor:pointer;
+    box-shadow:0 8px 32px rgba(37,99,235,0.45);
+    display:flex; align-items:center; gap:10px;
+  ">🖨️ Save as PDF</button>
+</div>
+
+</body>
+</html>
