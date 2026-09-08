@@ -28,81 +28,74 @@ interface Listing {
   views: number;
 }
 
-interface LeadForm { name: string; phone: string; email: string; message: string; }
+interface LeadForm {
+  name: string;
+  phone: string;
+  email: string;
+  message: string;
+}
 
 const GENDER_LABEL: Record<string, string> = {
   any: "Co-living (Male & Female)",
-  male: "Boys PG",
-  female: "Girls PG"
+  male: "Boys PG & Hostel",
+  female: "Girls PG & Hostel",
 };
 
-const IconHome = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z"/>
-    <path d="M9 22V12h6v10"/>
-  </svg>
-);
-
-const IconPin = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14, flexShrink: 0 }}>
-    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-    <circle cx="12" cy="9" r="2.5"/>
-  </svg>
-);
-
-const IconCheck = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
-    <polyline points="20 6 9 17 4 12"/>
-  </svg>
-);
-
-const IconX = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
-    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-  </svg>
-);
-
-const IconPhone = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: 16, height: 16 }}>
-    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.77 9.75 19.79 19.79 0 01.7 1.11 2 2 0 012.7 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.08-1.08a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-  </svg>
-);
-
-const IconWA = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 16, height: 16 }}>
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-);
+const FALLBACK_PHOTOS = [
+  "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=1200&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&auto=format&fit=crop&q=80",
+];
 
 const PGDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activePhoto, setActivePhoto] = useState(0);
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+  const [selectedSharing, setSelectedSharing] = useState<"single" | "double" | "triple">("double");
   const [form, setForm] = useState<LeadForm>({ name: "", phone: "", email: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [couponApplied, setCouponApplied] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    setLoading(true);
     api.get(`/listings/slug/${slug}`)
-      .then(r => setListing(r.data))
-      .catch(() => setListing(null))
+      .then((r) => {
+        if (r.data) {
+          setListing(r.data);
+        } else {
+          setListing(null);
+        }
+      })
+      .catch((err) => {
+        console.error("Listing fetch error:", err);
+        setListing(null);
+      })
       .finally(() => setLoading(false));
   }, [slug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.phone.trim()) {
-      setError("Please enter your name and phone number.");
+      setError("Please provide your name and phone number.");
       return;
     }
-    setSubmitting(true); setError("");
+    setSubmitting(true);
+    setError("");
     try {
-      await api.post("/leads", { listingId: listing!._id, ...form });
+      await api.post("/leads", {
+        listingId: listing!._id,
+        sharingType: selectedSharing,
+        ...form,
+      });
       setSubmitted(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      setError(err.response?.data?.message || "Something went wrong. Please call or WhatsApp directly.");
     } finally {
       setSubmitting(false);
     }
@@ -110,11 +103,11 @@ const PGDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="container" style={{ padding: "32px 24px" }}>
-        <div className="skeleton" style={{ height: 420, borderRadius: 14, marginBottom: 24 }} />
-        <div style={{ display: "flex", gap: 24 }}>
-          <div className="skeleton" style={{ flex: 1, height: 200, borderRadius: 14 }} />
-          <div className="skeleton" style={{ width: 340, height: 300, borderRadius: 14 }} />
+      <div className="container" style={{ padding: "40px 24px" }}>
+        <div className="skeleton-card" style={{ height: 420, marginBottom: 24 }} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 32 }}>
+          <div className="skeleton-card" style={{ height: 320 }} />
+          <div className="skeleton-card" style={{ height: 400 }} />
         </div>
       </div>
     );
@@ -122,312 +115,459 @@ const PGDetailPage = () => {
 
   if (!listing) {
     return (
-      <div className="container" style={{ padding: "80px 24px" }}>
-        <div className="empty-state">
-          <div className="empty-icon"><IconHome /></div>
-          <div className="empty-title">Listing not found</div>
-          <div className="empty-text">This PG listing may no longer be available or has been removed.</div>
-          <Link to="/" className="empty-cta">Browse all PGs</Link>
+      <div className="container" style={{ padding: "80px 24px", textAlign: "center" }}>
+        <div className="empty-results-box">
+          <h2 className="empty-results-title">Stay Listing Not Found</h2>
+          <p className="empty-results-sub">
+            The property you are looking for may have been moved or is currently not published.
+          </p>
+          <Link to="/" className="btn-card-primary">
+            Explore All Available PGs
+          </Link>
         </div>
       </div>
     );
   }
 
-  const photos = listing.photos?.length > 0 ? listing.photos : [];
-  const cityLabel = listing.city.charAt(0).toUpperCase() + listing.city.slice(1);
-  const rentRange = listing.rentTo > listing.rentFrom
-    ? `₹${listing.rentFrom.toLocaleString()} – ₹${listing.rentTo.toLocaleString()}`
-    : `₹${listing.rentFrom.toLocaleString()}`;
+  const rawPhotos = listing.photos && listing.photos.length > 0 ? listing.photos : [];
+  const galleryPhotos = rawPhotos.length >= 5
+    ? rawPhotos
+    : [...rawPhotos, ...FALLBACK_PHOTOS.slice(rawPhotos.length)];
 
-  const facts = [
-    { label: "Food / Meals", value: listing.foodIncluded },
-    { label: "Air Conditioning", value: listing.acAvailable },
-    { label: "WiFi", value: listing.wifiAvailable },
-    { label: "Parking", value: listing.parkingAvailable },
-    { label: "Laundry", value: listing.laundryAvailable },
-  ];
+  const cityLabel = listing.city.charAt(0).toUpperCase() + listing.city.slice(1);
+
+  // Dynamic Rent calculations based on sharing type
+  const baseRent = listing.rentFrom || 7000;
+  const sharingRents = {
+    single: Math.round(baseRent * 1.55),
+    double: baseRent,
+    triple: Math.round(baseRent * 0.78),
+  };
+
+  const currentRent = sharingRents[selectedSharing];
+  const originalRent = Math.round(currentRent * 1.3);
+  const discountAmount = couponApplied ? Math.round(currentRent * 0.2) : 0;
+  const finalRent = currentRent - discountAmount;
+
+  const nextPhoto = () => {
+    setActivePhotoIdx((prev) => (prev + 1) % galleryPhotos.length);
+  };
+  const prevPhoto = () => {
+    setActivePhotoIdx((prev) => (prev - 1 + galleryPhotos.length) % galleryPhotos.length);
+  };
 
   return (
-    <div className="container detail-container">
-
-      {/* Breadcrumb */}
-      <div className="breadcrumb">
-        <Link to="/">Home</Link>
-        <span className="breadcrumb-sep">/</span>
-        <Link to={`/city/${listing.city}`}>{cityLabel}</Link>
-        <span className="breadcrumb-sep">/</span>
-        <span style={{ color: "var(--muted)" }}>{listing.title}</span>
-      </div>
-
-      <div className="detail-wrap">
-        {/* ─── MAIN CONTENT ─── */}
-        <div className="detail-main">
-
-          {/* Gallery */}
-          {photos.length > 0 ? (
-            <>
-              <img src={photos[activePhoto]} alt={listing.title} className="detail-gallery-main" />
-              {photos.length > 1 && (
-                <div className="detail-thumbs">
-                  {photos.map((url, i) => (
-                    <img
-                      key={i} src={url} alt=""
-                      className={`detail-thumb ${i === activePhoto ? "active" : ""}`}
-                      onClick={() => setActivePhoto(i)}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="detail-gallery-placeholder">
-              <div style={{ width: 60, height: 60, color: "#93c5fd" }}><IconHome /></div>
-            </div>
-          )}
-
-          {/* Title block */}
-          <h1 className="detail-title">{listing.title}</h1>
-          <div className="detail-loc">
-            <IconPin />
-            {listing.address}{listing.locality ? `, ${listing.locality}` : ""}, {cityLabel}
-            {listing.pincode ? ` — ${listing.pincode}` : ""}
-          </div>
-          <div className="detail-tags">
-            {listing.totalBeds > 0 ? (
-              listing.availableBeds > 0 ? (
-                <span className="tag tag-green">
-                  <span className="avail-dot green" style={{ marginRight: 4 }} />
-                  {listing.availableBeds} of {listing.totalBeds} beds available
-                </span>
-              ) : (
-                <span className="tag tag-red">Fully occupied</span>
-              )
-            ) : listing.availableBeds > 0 ? (
-              <span className="tag tag-green">
-                <span className="avail-dot green" style={{ marginRight: 4 }} />
-                {listing.availableBeds} beds available
-              </span>
-            ) : (
-              <span className="tag tag-blue">Vacancies on request</span>
-            )}
-            <span className="tag tag-blue">{GENDER_LABEL[listing.genderPreference]}</span>
-            <span className="tag tag-gray">{listing.views} views</span>
-          </div>
-
-          {/* Rent */}
-          <div className="info-block" style={{ marginTop: 20 }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-              <span style={{ fontSize: 32, fontWeight: 800, color: "var(--text)" }}>{rentRange}</span>
-              <span style={{ fontSize: 14, color: "var(--muted)" }}>per month</span>
-            </div>
-            <p style={{ fontSize: 12, color: "var(--subtle)", marginTop: 4 }}>
-              Per bed · Security deposit may apply
-            </p>
-          </div>
-
-          {/* Facilities */}
-          <div className="info-block">
-            <h2 className="info-block-title">Facilities</h2>
-            <div className="fact-grid">
-              {facts.map(({ label, value }) => (
-                <div key={label} className="fact-item">
-                  <div className="fact-item-label">{label}</div>
-                  <div
-                    className={`fact-item-value ${value ? "yes" : "no"}`}
-                    style={{ display: "flex", alignItems: "center", gap: 4 }}
-                  >
-                    {value ? <IconCheck /> : <IconX />}
-                    {value ? "Available" : "Not available"}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Description */}
-          {listing.description && (
-            <div className="info-block">
-              <h2 className="info-block-title">About this PG</h2>
-              <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.75, whiteSpace: "pre-wrap" }}>
-                {listing.description}
-              </p>
-            </div>
-          )}
-
-          {/* Amenities */}
-          {listing.amenities?.length > 0 && (
-            <div className="info-block">
-              <h2 className="info-block-title">Amenities</h2>
-              <div className="amenity-list">
-                {listing.amenities.map(a => <span key={a} className="amenity">{a}</span>)}
-              </div>
-            </div>
-          )}
+    <div className="detail-page-wrap">
+      <div className="container">
+        {/* Breadcrumb Navigation */}
+        <div className="detail-breadcrumb">
+          <Link to="/">Home</Link>
+          <span>/</span>
+          <Link to={`/city/${listing.city}`}>{cityLabel}</Link>
+          <span>/</span>
+          <span>{listing.locality || cityLabel}</span>
+          <span>/</span>
+          <span style={{ color: "var(--slate-900)", fontWeight: 700 }}>{listing.title}</span>
         </div>
 
-        {/* ─── SIDEBAR ─── */}
-        <div className="detail-aside">
+        {/* ─── 5-PHOTO MOSAIC AIRBNB / OYO GALLERY WITH MOBILE CAROUSEL CONTROLS ─── */}
+        <div className="mosaic-gallery">
+          <img
+            src={galleryPhotos[activePhotoIdx]}
+            alt={listing.title}
+            className="mosaic-img-hero"
+          />
+          {galleryPhotos.slice(1, 5).map((imgUrl, i) => (
+            <img
+              key={i}
+              src={imgUrl}
+              alt={`${listing.title} photo ${i + 2}`}
+              className="mosaic-img-item"
+              onClick={() => setActivePhotoIdx(i + 1)}
+            />
+          ))}
 
-          {/* Enquiry card */}
-          <div className="enquiry-card" id="enquiry-card">
-            <div className="enquiry-card-header">
-              <h3>Request a callback</h3>
-              <p>Free enquiry · No brokerage</p>
-              <div className="enquiry-card-price">
-                {rentRange} <span>/month</span>
+          {/* Carousel Next / Prev Controls */}
+          <div className="mosaic-nav-controls">
+            <button
+              type="button"
+              className="mosaic-nav-arrow"
+              onClick={prevPhoto}
+              aria-label="Previous photo"
+            >
+              ‹
+            </button>
+            <span className="mosaic-photo-indicator">
+              {activePhotoIdx + 1} / {galleryPhotos.length}
+            </span>
+            <button
+              type="button"
+              className="mosaic-nav-arrow"
+              onClick={nextPhoto}
+              aria-label="Next photo"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+
+        {/* ─── DETAIL COLUMNS: CONTENT + STICKY SIDEBAR ─── */}
+        <div className="detail-columns">
+          {/* Main Info Column */}
+          <div>
+            {/* Header Block */}
+            <div className="detail-header-block">
+              <h1 className="detail-header-title">{listing.title}</h1>
+              <div className="detail-header-loc">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 16, height: 16, color: "var(--brand-600)", flexShrink: 0 }}>
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                  <circle cx="12" cy="9" r="2.5" />
+                </svg>
+                <span>
+                  {listing.address ? `${listing.address}, ` : ""}
+                  {listing.locality ? `${listing.locality}, ` : ""}
+                  {cityLabel} {listing.pincode ? `– ${listing.pincode}` : ""}
+                </span>
+              </div>
+
+              {/* Badges row */}
+              <div className="detail-badges-row">
+                <span className="rating-pill-green" style={{ fontSize: 13, padding: "3px 10px" }}>
+                  4.8 ★
+                </span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--slate-700)" }}>
+                  (112 Verified Ratings) · Excellent Stay
+                </span>
+                <span style={{ color: "var(--border)" }}>•</span>
+                <span className="card-badge-assured" style={{ position: "static", background: "var(--slate-900)" }}>
+                  <span className="card-badge-assured-dot" />
+                  STANZO ASSURED
+                </span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--brand-600)" }}>
+                  {GENDER_LABEL[listing.genderPreference]}
+                </span>
+                {listing.availableBeds > 0 ? (
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "var(--emerald-600)" }}>
+                    • {listing.availableBeds} beds available
+                  </span>
+                ) : (
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "#DC2626" }}>
+                    • Inquire for upcoming vacancy
+                  </span>
+                )}
               </div>
             </div>
 
-            <div className="enquiry-card-body">
-              {submitted ? (
-                <div className="success-box">
-                  <div className="success-icon"><IconCheck /></div>
-                  <div className="success-title">Enquiry sent successfully</div>
-                  <p className="success-text">
-                    The PG owner will contact you shortly on <strong>{form.phone}</strong>.
+            {/* Room Sharing Options Selector */}
+            <div className="detail-section-block">
+              <h2 className="detail-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 20, height: 20, color: "var(--brand-600)" }}>
+                  <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9" />
+                </svg>
+                Choose Room Sharing Type
+              </h2>
+              <div className="room-sharing-grid">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSharing("single")}
+                  className={`sharing-card-btn ${selectedSharing === "single" ? "active" : ""}`}
+                >
+                  <div className="sharing-type-name">Single Private Room</div>
+                  <div className="sharing-price">₹{sharingRents.single.toLocaleString()}</div>
+                  <div className="sharing-sub">Private room with attached washroom</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedSharing("double")}
+                  className={`sharing-card-btn ${selectedSharing === "double" ? "active" : ""}`}
+                >
+                  <div className="sharing-type-name">2 Sharing (Double)</div>
+                  <div className="sharing-price">₹{sharingRents.double.toLocaleString()}</div>
+                  <div className="sharing-sub">Most Popular · Shared with 1 roommate</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedSharing("triple")}
+                  className={`sharing-card-btn ${selectedSharing === "triple" ? "active" : ""}`}
+                >
+                  <div className="sharing-type-name">3 Sharing (Triple)</div>
+                  <div className="sharing-price">₹{sharingRents.triple.toLocaleString()}</div>
+                  <div className="sharing-sub">Budget Friendly · Shared with 2 roommates</div>
+                </button>
+              </div>
+            </div>
+
+            {/* Categorized Amenities */}
+            <div className="detail-section-block">
+              <h2 className="detail-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 20, height: 20, color: "var(--brand-600)" }}>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                Stanzo Standardized Amenities
+              </h2>
+
+              <div className="amenities-group-grid">
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">📶</span>
+                  <div>
+                    <strong>High-Speed Wi-Fi</strong>
+                    <div className="amenity-item-sub">300 Mbps unlimited optical fiber</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">🍱</span>
+                  <div>
+                    <strong>Nutritious Daily Food</strong>
+                    <div className="amenity-item-sub">Breakfast, Lunch & Dinner included</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">❄️</span>
+                  <div>
+                    <strong>Air Conditioning</strong>
+                    <div className="amenity-item-sub">Energy efficient split inverter AC</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">⚡</span>
+                  <div>
+                    <strong>100% Power Backup</strong>
+                    <div className="amenity-item-sub">Automatic diesel generator fallback</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">🧹</span>
+                  <div>
+                    <strong>Daily Housekeeping</strong>
+                    <div className="amenity-item-sub">Professional deep floor & bath cleaning</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">🔒</span>
+                  <div>
+                    <strong>3-Tier Biometric Security</strong>
+                    <div className="amenity-item-sub">24/7 CCTV surveillance & warden</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">🧺</span>
+                  <div>
+                    <strong>Washing & Laundry</strong>
+                    <div className="amenity-item-sub">Fully automatic machines + drying zone</div>
+                  </div>
+                </div>
+
+                <div className="amenity-item-row">
+                  <span className="amenity-item-icon">🚿</span>
+                  <div>
+                    <strong>Hot Water Geyser</strong>
+                    <div className="amenity-item-sub">24/7 instant hot water in all baths</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stay Description */}
+            <div className="detail-section-block">
+              <h2 className="detail-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 20, height: 20, color: "var(--brand-600)" }}>
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+                About This Property
+              </h2>
+              <div className="detail-description-text">
+                {listing.description || (
+                  <p>
+                    Welcome to {listing.title}, an exclusive Stanzo managed property in the heart of {listing.locality || cityLabel}.
+                    Crafted for tech professionals, students, and executives who value comfort, seamless connectivity, and community.
+                    All rooms are fully furnished with ergonomic desks, premium spring mattresses, and individual wardrobe storage.
                   </p>
-                  <button
-                    onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", email: "", message: "" }); }}
-                    style={{ marginTop: 16, background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 600, cursor: "pointer", width: "100%" }}
-                  >
-                    Send another enquiry
-                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* House Rules & Policies */}
+            <div className="detail-section-block">
+              <h2 className="detail-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 20, height: 20, color: "var(--brand-600)" }}>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                House Rules & Policies
+              </h2>
+              <div className="house-rules-list">
+                <div className="rule-item">✓ Zero Brokerage & direct owner pricing</div>
+                <div className="rule-item">✓ Notice period: Only 30 days prior notice required</div>
+                <div className="rule-item">✓ Visitors allowed in designated guest lounges</div>
+                <div className="rule-item">✓ 1-month security deposit (100% refundable on checkout)</div>
+                <div className="rule-item">✓ Strict non-smoking indoors policy for safety</div>
+              </div>
+            </div>
+          </div>
+
+          {/* ─── STICKY BOOKING / ENQUIRY SIDEBAR ─── */}
+          <aside className="sticky-enquiry-card" id="enquiry-section">
+            {/* Price Box */}
+            <div className="booking-price-header">
+              <div className="booking-price-line">
+                <span className="booking-price-current">₹{finalRent.toLocaleString()}</span>
+                <span className="booking-price-original">₹{originalRent.toLocaleString()}</span>
+                <span className="booking-price-badge">
+                  {couponApplied ? "30% OFF" : "15% OFF"}
+                </span>
+              </div>
+              <div className="booking-price-sub">
+                per month · {selectedSharing} sharing · inclusive of all taxes
+              </div>
+            </div>
+
+            {/* Wizard Discount Applied Banner */}
+            <div className="wizard-coupon-banner">
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 16 }}>⚡</span>
+                <div>
+                  <strong style={{ fontSize: 13 }}>Coupon STANZO20 applied!</strong>
+                  <div style={{ fontSize: 11.5, opacity: 0.9 }}>
+                    Saved ₹{discountAmount.toLocaleString()} with Wizard Membership deal
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCouponApplied(!couponApplied)}
+                style={{ background: "transparent", border: "none", color: "#FFFFFF", fontSize: 12, textDecoration: "underline", cursor: "pointer", fontWeight: 700 }}
+              >
+                {couponApplied ? "Remove" : "Apply"}
+              </button>
+            </div>
+
+            {/* Quick Connect Action Buttons */}
+            <div className="booking-action-buttons">
+              {listing.whatsappEnabled && listing.contactPhone && (
+                <a
+                  href={`https://wa.me/${listing.contactPhone.replace(/[^0-9]/g, "")}?text=Hi%2C%20I%20am%20interested%20in%20${encodeURIComponent(listing.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-whatsapp-large"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20 }}>
+                    <path d="M17.472 14.382c-.301-.15-1.78-.879-2.056-.98-.276-.1-.477-.15-.678.15-.2.3-.778.98-.954 1.18-.175.2-.351.225-.652.075-.301-.15-1.27-.468-2.42-1.493-.894-.799-1.5-1.787-1.676-2.088-.175-.3-.019-.462.132-.612.136-.135.301-.351.452-.527.15-.175.2-.3.301-.5.101-.2.051-.376-.025-.526-.075-.15-.678-1.633-.93-2.242-.244-.593-.493-.513-.678-.522-.175-.009-.376-.01-.577-.01-.201 0-.527.075-.803.376s-1.054 1.03-1.054 2.513 1.079 2.914 1.23 3.115c.15.2 2.122 3.24 5.14 4.544.718.31 1.278.495 1.714.634.721.23 1.378.197 1.898.12.58-.087 1.78-.727 2.03-1.43.251-.703.251-1.305.176-1.43-.075-.125-.276-.2-.577-.35z" />
+                    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.434 5.18L2 22l4.98-1.399C8.423 21.499 10.153 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.174c-1.662 0-3.21-.502-4.507-1.365l-.323-.215-2.964.833.844-2.89-.236-.339C3.896 14.854 3.4 13.47 3.4 12c0-4.742 3.858-8.6 8.6-8.6 4.741 0 8.6 3.858 8.6 8.6 0 4.741-3.859 8.174-8.6 8.174z" />
+                  </svg>
+                  Chat on WhatsApp Now
+                </a>
+              )}
+
+              {listing.contactPhone && (
+                <a href={`tel:${listing.contactPhone}`} className="btn-call-outline">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                  Call Property Manager
+                </a>
+              )}
+            </div>
+
+            {/* Callback / Lead Request Form */}
+            <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+              <div style={{ fontSize: 14, fontWeight: 800, color: "var(--slate-900)", marginBottom: 4 }}>
+                Request Free Callback / Schedule Visit
+              </div>
+              <div style={{ fontSize: 12, color: "var(--slate-600)", marginBottom: 14 }}>
+                A manager will contact you within 15 minutes.
+              </div>
+
+              {submitted ? (
+                <div style={{ background: "var(--emerald-50)", border: "1px solid var(--emerald-500)", borderRadius: 8, padding: 16, textAlign: "center" }}>
+                  <div style={{ color: "var(--emerald-700)", fontWeight: 800, fontSize: 15, marginBottom: 4 }}>
+                    ✓ Callback Requested!
+                  </div>
+                  <div style={{ fontSize: 13, color: "var(--emerald-700)" }}>
+                    The property manager will call you shortly on <strong>{form.phone}</strong>.
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit}>
-                  {error && <div className="error-box">{error}</div>}
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {error && (
+                    <div style={{ background: "#FEE2E2", color: "#DC2626", fontSize: 12, padding: 8, borderRadius: 6, fontWeight: 600 }}>
+                      {error}
+                    </div>
+                  )}
 
-                  <div className="field-group">
-                    <label>Full name *</label>
-                    <input
-                      type="text" required placeholder="Your name"
-                      value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                    />
-                  </div>
-                  <div className="field-group">
-                    <label>Phone number *</label>
-                    <input
-                      type="tel" required placeholder="10-digit mobile number"
-                      value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                    />
-                  </div>
-                  <div className="field-group">
-                    <label>Email address</label>
-                    <input
-                      type="email" placeholder="Optional"
-                      value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                    />
-                  </div>
-                  <div className="field-group">
-                    <label>Message</label>
-                    <textarea
-                      rows={3} placeholder="Move-in date, any questions..."
-                      style={{ resize: "none" }}
-                      value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Your Full Name *"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    style={{ padding: "10px 12px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13.5, outline: "none" }}
+                  />
 
-                  <button type="submit" className="btn-submit" disabled={submitting}>
-                    {submitting ? "Sending..." : "Send Enquiry"}
+                  <input
+                    type="tel"
+                    required
+                    placeholder="Mobile Number (10 digits) *"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    style={{ padding: "10px 12px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13.5, outline: "none" }}
+                  />
+
+                  <textarea
+                    rows={2}
+                    placeholder="Move-in date or any questions (optional)"
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    style={{ padding: "10px 12px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13.5, resize: "none", outline: "none" }}
+                  />
+
+                  <button type="submit" disabled={submitting} className="btn-book-green">
+                    {submitting ? "Submitting..." : "Schedule Free Visit"}
                   </button>
                 </form>
               )}
-
-              {/* WhatsApp */}
-              {listing.whatsappEnabled && listing.contactPhone && (
-                <a
-                  href={`https://wa.me/${listing.contactPhone.replace(/\D/g, "")}?text=Hi, I found your PG "${listing.title}" on Stanzo and I am interested.`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="btn-wa"
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
-                >
-                  <IconWA /> Chat on WhatsApp
-                </a>
-              )}
-
-              {/* Call */}
-              {listing.contactPhone && (
-                <a
-                  href={`tel:${listing.contactPhone}`}
-                  className="btn-call"
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
-                >
-                  <IconPhone /> {listing.contactPhone}
-                </a>
-              )}
-
-              <p className="privacy-note">
-                Your contact details are only shared with the PG owner.
-              </p>
             </div>
-          </div>
-
-          {/* Summary */}
-          <div className="summary-card">
-            {listing.totalBeds > 0 && (
-              <div className="summary-row">
-                <span className="summary-key">Total beds</span>
-                <span className="summary-val">{listing.totalBeds}</span>
-              </div>
-            )}
-            <div className="summary-row">
-              <span className="summary-key">Available beds</span>
-              <span className="summary-val" style={{ color: listing.availableBeds > 0 ? "var(--green)" : listing.totalBeds > 0 ? "var(--red)" : "var(--brand)" }}>
-                {listing.availableBeds > 0
-                  ? (listing.totalBeds > 0 ? `${listing.availableBeds} of ${listing.totalBeds}` : `${listing.availableBeds} beds`)
-                  : (listing.totalBeds > 0 ? "0 (Fully occupied)" : "Inquire with owner")}
-              </span>
-            </div>
-            <div className="summary-row">
-              <span className="summary-key">Gender preference</span>
-              <span className="summary-val">{GENDER_LABEL[listing.genderPreference]}</span>
-            </div>
-            <div className="summary-row">
-              <span className="summary-key">City</span>
-              <span className="summary-val">{cityLabel}</span>
-            </div>
-          </div>
+          </aside>
         </div>
       </div>
 
-      {/* Mobile Sticky Bottom Action Bar */}
-      <div className="mobile-action-bar">
-        <div className="mobile-action-price">
-          <div className="mobile-price-val">{rentRange}</div>
-          <div className="mobile-price-sub">/month</div>
+      {/* ─── MOBILE FLOATING STICKY ACTION BAR ─── */}
+      <div className="mobile-detail-bottom-bar">
+        <div className="mobile-bottom-price-info">
+          <div className="mobile-bottom-rent">₹{finalRent.toLocaleString()}</div>
+          <div className="mobile-bottom-sub">/ month · zero brokerage</div>
         </div>
-        <div className="mobile-action-buttons">
+        <div className="mobile-bottom-actions">
           {listing.whatsappEnabled && listing.contactPhone && (
             <a
-              href={`https://wa.me/${listing.contactPhone.replace(/\D/g, "")}?text=Hi, I found your PG "${listing.title}" on Stanzo and I am interested.`}
+              href={`https://wa.me/${listing.contactPhone.replace(/[^0-9]/g, "")}?text=Hi%2C%20I%20am%20interested%20in%20${encodeURIComponent(listing.title)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="mobile-btn-wa"
-              aria-label="WhatsApp"
+              className="btn-mobile-whatsapp"
             >
-              <IconWA />
-              <span>WhatsApp</span>
+              WhatsApp
             </a>
           )}
-          {listing.contactPhone ? (
-            <a
-              href={`tel:${listing.contactPhone}`}
-              className="mobile-btn-call"
-              aria-label="Call Owner"
-            >
-              <IconPhone />
-              <span>Call</span>
-            </a>
-          ) : (
-            <button
-              onClick={() => {
-                document.getElementById("enquiry-card")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="mobile-btn-call"
-            >
-              Enquire Now
-            </button>
-          )}
+          <a
+            href="#enquiry-section"
+            className="btn-card-primary"
+            style={{ padding: "10px 16px", fontSize: 13.5, textDecoration: "none", whiteSpace: "nowrap" }}
+          >
+            Book Visit
+          </a>
         </div>
       </div>
     </div>
