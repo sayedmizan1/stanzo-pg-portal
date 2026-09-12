@@ -68,21 +68,58 @@ const PGDetailPage = () => {
       .then((r) => {
         if (r.data) {
           setListing(r.data);
+          // SEO: update page title and meta tags dynamically
+          const l = r.data;
+          const cityLabel = l.city.charAt(0).toUpperCase() + l.city.slice(1);
+          document.title = `${l.title} | PG in ${cityLabel} - Stanzo`;
+
+          // Open Graph / social sharing meta tags
+          const setMeta = (property: string, content: string) => {
+            let el = document.querySelector(`meta[property="${property}"]`);
+            if (!el) {
+              el = document.createElement("meta");
+              el.setAttribute("property", property);
+              document.head.appendChild(el);
+            }
+            el.setAttribute("content", content);
+          };
+          setMeta("og:title", `${l.title} | PG in ${cityLabel} - Stanzo`);
+          setMeta("og:description", l.description || `Affordable PG accommodation in ${l.locality || cityLabel}. Starting from ₹${l.rentFrom?.toLocaleString("en-IN")}/month.`);
+          setMeta("og:image", l.photos?.[0] || "");
+          setMeta("og:type", "website");
+          setMeta("og:url", window.location.href);
         } else {
           setListing(null);
+          document.title = "PG Not Found - Stanzo";
         }
       })
       .catch((err) => {
         console.error("Listing fetch error:", err);
         setListing(null);
+        document.title = "PG Not Found - Stanzo";
       })
       .finally(() => setLoading(false));
+
+    // Cleanup: reset title on unmount
+    return () => {
+      document.title = "Stanzo - Find PGs & Hostels";
+    };
   }, [slug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.phone.trim()) {
-      setError("Please provide your name and phone number.");
+    if (!form.name.trim()) {
+      setError("Please enter your full name.");
+      return;
+    }
+    if (!form.phone.trim()) {
+      setError("Please enter your phone number.");
+      return;
+    }
+    // Phone validation: at least 10 digits
+    const digitsOnly = form.phone.replace(/[^0-9]/g, "");
+    if (digitsOnly.length < 10) {
+      setError("Please enter a valid 10-digit phone number.");
       return;
     }
     setSubmitting(true);

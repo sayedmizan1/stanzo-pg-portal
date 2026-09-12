@@ -65,6 +65,17 @@ const CityPage = () => {
   ].filter(Boolean).length;
 
   useEffect(() => {
+    const cityLabel = city ? city.charAt(0).toUpperCase() + city.slice(1) : "";
+    document.title = cityLabel
+      ? `PG in ${cityLabel} | Find Rooms & Hostels - Stanzo`
+      : "Stanzo — Find PGs & Hostels Across India";
+
+    return () => {
+      document.title = "Stanzo — Find PGs & Hostels Across India";
+    };
+  }, [city]);
+
+  useEffect(() => {
     setLoading(true);
     const params: Record<string, string> = { city: city || "" };
     if (gender) params.gender = gender;
@@ -96,6 +107,7 @@ const CityPage = () => {
       })
       .finally(() => setLoading(false));
   }, [city, gender, food, ac, wifi, selectedLocality, sortBy]);
+
 
   const clearAllFilters = () => {
     setSelectedLocality("");

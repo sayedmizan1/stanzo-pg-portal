@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const TOP_CITIES = [
@@ -20,6 +20,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dashboardUrl = import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in";
 
+  // Auto-close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname, location.search]);
+
   // Check active city from URL params or pathname
   const searchParams = new URLSearchParams(location.search);
   const currentParamCity = searchParams.get("city") || "";
@@ -31,7 +36,8 @@ const Navbar = () => {
     if (!slug) {
       navigate("/");
     } else {
-      navigate(`/?city=${slug}`);
+      // Navigate to dedicated city page for better SEO and UX
+      navigate(`/city/${slug}`);
     }
   };
 
