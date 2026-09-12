@@ -294,7 +294,7 @@ const PGDetailPage = () => {
                   className={`sharing-card-btn ${selectedSharing === "single" ? "active" : ""}`}
                 >
                   <div className="sharing-type-name">Single Private Room</div>
-                  <div className="sharing-price">₹{sharingRents.single.toLocaleString()}</div>
+                  <div className="sharing-price">₹{sharingRents.single.toLocaleString("en-IN")}</div>
                   <div className="sharing-sub">Private room with attached washroom</div>
                 </button>
 
@@ -304,7 +304,7 @@ const PGDetailPage = () => {
                   className={`sharing-card-btn ${selectedSharing === "double" ? "active" : ""}`}
                 >
                   <div className="sharing-type-name">2 Sharing (Double)</div>
-                  <div className="sharing-price">₹{sharingRents.double.toLocaleString()}</div>
+                  <div className="sharing-price">₹{sharingRents.double.toLocaleString("en-IN")}</div>
                   <div className="sharing-sub">Most Popular · Shared with 1 roommate</div>
                 </button>
 
@@ -314,13 +314,13 @@ const PGDetailPage = () => {
                   className={`sharing-card-btn ${selectedSharing === "triple" ? "active" : ""}`}
                 >
                   <div className="sharing-type-name">3 Sharing (Triple)</div>
-                  <div className="sharing-price">₹{sharingRents.triple.toLocaleString()}</div>
+                  <div className="sharing-price">₹{sharingRents.triple.toLocaleString("en-IN")}</div>
                   <div className="sharing-sub">Budget Friendly · Shared with 2 roommates</div>
                 </button>
               </div>
             </div>
 
-            {/* Included Amenities */}
+            {/* Included Amenities with Professional SVGs */}
             <div className="detail-section-block">
               <h2 className="detail-section-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 20, height: 20, color: "var(--brand-600)" }}>
@@ -332,7 +332,11 @@ const PGDetailPage = () => {
 
               <div className="amenities-group-grid">
                 <div className="amenity-item-row">
-                  <span className="amenity-item-icon">📶</span>
+                  <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--brand-50)", color: "var(--brand-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                      <path d="M5 12.55a11 11 0 0114.08 0" /><path d="M1.42 9a16 16 0 0121.16 0" /><circle cx="12" cy="20" r="1" fill="currentColor" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>High-Speed Wi-Fi</strong>
                     <div className="amenity-item-sub">Unlimited high-speed optical fiber</div>
@@ -340,7 +344,11 @@ const PGDetailPage = () => {
                 </div>
 
                 <div className="amenity-item-row">
-                  <span className="amenity-item-icon">🍱</span>
+                  <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--brand-50)", color: "var(--brand-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                      <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 01-4-4V8z" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>Nutritious Daily Food</strong>
                     <div className="amenity-item-sub">Breakfast, Lunch & Dinner included</div>
@@ -348,7 +356,11 @@ const PGDetailPage = () => {
                 </div>
 
                 <div className="amenity-item-row">
-                  <span className="amenity-item-icon">❄️</span>
+                  <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--brand-50)", color: "var(--brand-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                      <rect x="1" y="3" width="22" height="11" rx="2" /><path d="M5 14v7M12 14v7M19 14v7" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>Air Conditioning (AC)</strong>
                     <div className="amenity-item-sub">Energy-efficient climate control</div>
@@ -356,7 +368,11 @@ const PGDetailPage = () => {
                 </div>
 
                 <div className="amenity-item-row">
-                  <span className="amenity-item-icon">⚡</span>
+                  <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--brand-50)", color: "var(--brand-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>100% Power Backup</strong>
                     <div className="amenity-item-sub">Automatic DG power fallback</div>
@@ -364,7 +380,11 @@ const PGDetailPage = () => {
                 </div>
 
                 <div className="amenity-item-row">
-                  <span className="amenity-item-icon">🧹</span>
+                  <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--brand-50)", color: "var(--brand-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>Daily Housekeeping</strong>
                     <div className="amenity-item-sub">Professional deep cleaning</div>
@@ -372,7 +392,12 @@ const PGDetailPage = () => {
                 </div>
 
                 <div className="amenity-item-row">
-                  <span className="amenity-item-icon">🔒</span>
+                  <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--brand-50)", color: "var(--brand-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>3-Tier Security</strong>
                     <div className="amenity-item-sub">24/7 CCTV surveillance & warden</div>
@@ -425,7 +450,7 @@ const PGDetailPage = () => {
           <aside className="sticky-enquiry-card" id="enquiry-section">
             <div className="booking-price-header">
               <div className="booking-price-line">
-                <span className="booking-price-current">₹{currentRent.toLocaleString()}</span>
+                <span className="booking-price-current">₹{currentRent.toLocaleString("en-IN")}</span>
                 <span style={{ fontSize: 14, color: "var(--slate-500)", fontWeight: 600 }}>/ month</span>
               </div>
               <div className="booking-price-sub">
@@ -525,7 +550,7 @@ const PGDetailPage = () => {
       {/* Mobile Floating Bottom Bar */}
       <div className="mobile-detail-bottom-bar">
         <div>
-          <div className="mobile-bottom-rent">₹{currentRent.toLocaleString()}</div>
+          <div className="mobile-bottom-rent">₹{currentRent.toLocaleString("en-IN")}</div>
           <div className="mobile-bottom-sub">/ month · zero brokerage</div>
         </div>
         <div className="mobile-bottom-actions">

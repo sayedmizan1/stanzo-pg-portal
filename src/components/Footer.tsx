@@ -43,7 +43,11 @@ const Footer = () => {
             </p>
             <div style={{ marginTop: 20 }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)", padding: "6px 14px", borderRadius: "var(--radius-pill)", fontSize: 12, fontWeight: 700, color: "#E2E8F0" }}>
-                <span>✦ 100% Verified Accommodations</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth={2.5} style={{ width: 14, height: 14 }}>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <span>100% Verified Accommodations</span>
               </div>
             </div>
           </div>

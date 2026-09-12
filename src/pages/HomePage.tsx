@@ -38,7 +38,7 @@ const POPULAR_CITY_HUBS = [
     name: "Bangalore",
     slug: "bangalore",
     image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&auto=format&fit=crop&q=80",
-    areas: "Koramangala, HSR, Indiranagar",
+    areas: "Koramangala, HSR Layout, Indiranagar",
   },
   {
     name: "Gurgaon",
@@ -159,7 +159,7 @@ const StayCard = ({ pg }: { pg: Listing }) => {
           {pg.foodIncluded && (
             <span className="amenity-chip-micro">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
-                <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
               </svg>
               Meals Included
             </span>
@@ -174,7 +174,7 @@ const StayCard = ({ pg }: { pg: Listing }) => {
           )}
           {pg.availableBeds > 0 ? (
             <span className="amenity-chip-micro" style={{ color: "var(--emerald-700)", background: "var(--emerald-50)", borderColor: "var(--emerald-100)" }}>
-              ✓ {pg.availableBeds} beds left
+              {pg.availableBeds} beds left
             </span>
           ) : (
             <span className="amenity-chip-micro" style={{ color: "var(--brand-700)", background: "var(--brand-50)" }}>
@@ -186,7 +186,7 @@ const StayCard = ({ pg }: { pg: Listing }) => {
         {/* Footer */}
         <div className="stay-card-footer">
           <div className="stay-card-price-wrap">
-            <div className="stay-card-rent">₹{pg.rentFrom.toLocaleString()}</div>
+            <div className="stay-card-rent">₹{pg.rentFrom.toLocaleString("en-IN")}</div>
             <div className="stay-card-rent-sub">per month · Zero Brokerage</div>
           </div>
 
@@ -222,7 +222,6 @@ const HomePage = () => {
   const [rentMax, setRentMax] = useState(searchParams.get("rentMax") || "");
   const [selectedLocality, setSelectedLocality] = useState(searchParams.get("locality") || "");
   const [sortBy, setSortBy] = useState("popular");
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const activeFiltersCount = [
     Boolean(city),
@@ -321,7 +320,7 @@ const HomePage = () => {
 
   return (
     <>
-      {/* ─── LUXURY HERO SECTION ─── */}
+      {/* ─── HERO SECTION ─── */}
       <section className="luxury-hero">
         <div className="hero-ambient-glow-1" />
         <div className="hero-ambient-glow-2" />
@@ -330,7 +329,7 @@ const HomePage = () => {
           <div className="hero-container-inner">
             <div className="hero-tag-pill">
               <span className="hero-tag-pulse" />
-              Over 500+ Verified Stays in India
+              Verified Accommodations Across India
             </div>
 
             <h1 className="hero-headline">
@@ -343,7 +342,7 @@ const HomePage = () => {
               Zero brokerage guaranteed.
             </p>
 
-            {/* ─── FLOATING BESPOKE SEARCH CARD ─── */}
+            {/* ─── FLOATING SEARCH CARD ─── */}
             <div className="search-card-float">
               {/* Segment 1: City */}
               <div className="search-field-box">
@@ -393,13 +392,10 @@ const HomePage = () => {
                 </select>
               </div>
 
-              {/* Segment 3: Budget */}
+              {/* Segment 3: Budget in Indian Rupees */}
               <div className="search-field-box">
                 <span className="search-field-label">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 13, height: 13, color: "var(--brand-600)" }}>
-                    <line x1="12" y1="1" x2="12" y2="23" />
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
+                  <span style={{ fontSize: 13, fontWeight: 800, color: "var(--brand-600)", marginRight: 2 }}>₹</span>
                   Monthly Budget
                 </span>
                 <div className="search-field-budget-inputs">
@@ -517,13 +513,19 @@ const HomePage = () => {
               onClick={() => setFood(!food)}
               className={`quick-tab-pill ${food ? "active" : ""}`}
             >
-              🍱 Food Included
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 14, height: 14 }}>
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 01-4-4V8z" />
+              </svg>
+              Meals Included
             </button>
             <button
               onClick={() => setAc(!ac)}
               className={`quick-tab-pill ${ac ? "active" : ""}`}
             >
-              ❄️ AC Available
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 14, height: 14 }}>
+                <rect x="1" y="3" width="22" height="11" rx="2" /><path d="M5 14v7M12 14v7M19 14v7" />
+              </svg>
+              AC Rooms
             </button>
           </div>
 
@@ -792,7 +794,7 @@ const HomePage = () => {
           <div className="owner-cta-card">
             <div className="owner-cta-content">
               <div className="owner-cta-tag">
-                <span>✦ Property Owners & Landlords</span>
+                <span>Property Owners & Landlords</span>
               </div>
               <h2 className="owner-cta-title">
                 Have a PG or Hostel? <br />

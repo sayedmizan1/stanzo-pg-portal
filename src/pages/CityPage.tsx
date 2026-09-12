@@ -138,7 +138,7 @@ const StayCard = ({ pg }: { pg: Listing }) => {
 
         <div className="stay-card-footer">
           <div className="stay-card-price-wrap">
-            <div className="stay-card-rent">₹{pg.rentFrom.toLocaleString()}</div>
+            <div className="stay-card-rent">₹{pg.rentFrom.toLocaleString("en-IN")}</div>
             <div className="stay-card-rent-sub">per month · Zero Brokerage</div>
           </div>
 
