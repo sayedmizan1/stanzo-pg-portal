@@ -26,12 +26,50 @@ const GENDER_LABELS: Record<string, string> = {
   female: "Girls PG",
 };
 
-// Fallback high quality stay photos if listing has none
 const FALLBACK_PHOTOS = [
   "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=80",
+];
+
+const POPULAR_CITY_HUBS = [
+  {
+    name: "Bangalore",
+    slug: "bangalore",
+    image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&auto=format&fit=crop&q=80",
+    areas: "Koramangala, HSR, Indiranagar",
+  },
+  {
+    name: "Gurgaon",
+    slug: "gurgaon",
+    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&auto=format&fit=crop&q=80",
+    areas: "Cyber City, DLF Phase 3, Sector 48",
+  },
+  {
+    name: "Hyderabad",
+    slug: "hyderabad",
+    image: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=600&auto=format&fit=crop&q=80",
+    areas: "Hitec City, Madhapur, Gachibowli",
+  },
+  {
+    name: "Pune",
+    slug: "pune",
+    image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&auto=format&fit=crop&q=80",
+    areas: "Hinjewadi, Viman Nagar, Wakad",
+  },
+  {
+    name: "Mumbai",
+    slug: "mumbai",
+    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&auto=format&fit=crop&q=80",
+    areas: "Andheri, Powai, Bandra",
+  },
+  {
+    name: "Delhi",
+    slug: "delhi",
+    image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&auto=format&fit=crop&q=80",
+    areas: "North Campus, Saket, Hauz Khas",
+  },
 ];
 
 const LOCALITY_PRESETS: Record<string, string[]> = {
@@ -44,8 +82,8 @@ const LOCALITY_PRESETS: Record<string, string[]> = {
   pune: ["Hinjewadi", "Viman Nagar", "Kothrud", "Wakad", "Baner"],
 };
 
-/* ─── OYO HORIZONTAL LISTING CARD COMPONENT ─── */
-const OYOLabelCard = ({ pg }: { pg: Listing }) => {
+/* ─── MODERN LUXURY STAY CARD COMPONENT ─── */
+const StayCard = ({ pg }: { pg: Listing }) => {
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const navigate = useNavigate();
 
@@ -53,159 +91,111 @@ const OYOLabelCard = ({ pg }: { pg: Listing }) => {
   const currentPhoto = photosList[activePhotoIdx] || photosList[0];
   const cityLabel = pg.city.charAt(0).toUpperCase() + pg.city.slice(1);
 
-  // Realistic strike-through price calculation (25-30% higher for that OYO discount kick)
-  const originalPrice = Math.round((pg.rentFrom * 1.33) / 100) * 100;
-  const discountPercent = Math.round(((originalPrice - pg.rentFrom) / originalPrice) * 100);
-
-  // Generate consistent social proof tag based on id
-  const enquiryCount = (pg._id.charCodeAt(pg._id.length - 1) % 15) + 6;
-
   return (
-    <div className="oyo-card">
-      {/* Left Media Area: Main Image + 3-4 Thumbnails */}
-      <div className="oyo-card-media">
-        <img
-          src={currentPhoto}
-          alt={pg.title}
-          className="oyo-card-main-img"
-          loading="lazy"
-        />
-        <div className="card-badge-assured">
-          <span className="card-badge-assured-dot" />
-          STANZO ASSURED
+    <div className="stay-card-luxury">
+      {/* Media Container */}
+      <div className="stay-card-media">
+        <Link to={`/pg/${pg.slug}`}>
+          <img
+            src={currentPhoto}
+            alt={pg.title}
+            className="stay-card-img"
+            loading="lazy"
+          />
+        </Link>
+
+        {/* Top Badges */}
+        <div className="stay-card-badges-top">
+          <div className="badge-verified-pill">
+            <span className="badge-verified-dot" />
+            <span>Stanzo Verified</span>
+          </div>
+
+          <div className={`badge-gender-pill ${pg.genderPreference}`}>
+            {GENDER_LABELS[pg.genderPreference] || "Co-Living"}
+          </div>
         </div>
 
-        {/* Thumbnail Preview Strip */}
-        <div className="oyo-card-thumb-strip">
-          {photosList.slice(0, 4).map((thumb, idx) => (
-            <img
-              key={idx}
-              src={thumb}
-              alt=""
-              className={`oyo-card-thumb ${idx === activePhotoIdx ? "active" : ""}`}
-              onMouseEnter={() => setActivePhotoIdx(idx)}
-              onClick={() => setActivePhotoIdx(idx)}
-            />
-          ))}
-        </div>
+        {/* Dots on Hover */}
+        {photosList.length > 1 && (
+          <div className="stay-card-dots">
+            {photosList.slice(0, 4).map((_, idx) => (
+              <span
+                key={idx}
+                className={`stay-card-dot ${idx === activePhotoIdx ? "active" : ""}`}
+                onMouseEnter={() => setActivePhotoIdx(idx)}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Right Content Area */}
-      <div className="oyo-card-info">
-        <div>
-          {/* Top Row: Title + Urgency */}
-          <div className="oyo-card-top-row">
-            <Link to={`/pg/${pg.slug}`} style={{ textDecoration: "none" }}>
-              <h3 className="oyo-card-title">{pg.title}</h3>
-            </Link>
-            <div className="urgency-badge">
-              🔥 {enquiryCount} enquired recently
-            </div>
-          </div>
-
-          {/* Location */}
-          <div className="oyo-card-location">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 14, height: 14, color: "var(--brand-600)", flexShrink: 0 }}>
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-              <circle cx="12" cy="9" r="2.5" />
-            </svg>
-            <span>{pg.locality ? `${pg.locality}, ` : ""}{cityLabel}</span>
-          </div>
-
-          {/* Rating Pill + Category */}
-          <div className="oyo-card-rating-row">
-            <span className="rating-pill-green">
-              4.6 ★
-            </span>
-            <span className="rating-pill-meta">
-              (78 Ratings) · <span className="rating-descriptor">Excellent</span>
-            </span>
-            <span style={{ color: "var(--border)" }}>•</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--blue)" }}>
-              {GENDER_LABELS[pg.genderPreference]}
-            </span>
-            {pg.availableBeds > 0 ? (
-              <span style={{ fontSize: 12, fontWeight: 700, color: "var(--oyo-green)" }}>
-                • {pg.availableBeds} beds left
-              </span>
-            ) : (
-              <span style={{ fontSize: 12, fontWeight: 700, color: "var(--brand-600)" }}>
-                • Filling fast
-              </span>
-            )}
-          </div>
-
-          {/* Amenities Strip */}
-          <div className="oyo-card-amenities">
-            {pg.wifiAvailable && (
-              <div className="amenity-pill-inline">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path d="M5 12.55a11 11 0 0114.08 0" /><path d="M1.42 9a16 16 0 0121.16 0" /><circle cx="12" cy="20" r="1" fill="currentColor" />
-                </svg>
-                <span>Free WiFi</span>
-              </div>
-            )}
-            {pg.acAvailable && (
-              <div className="amenity-pill-inline">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <rect x="1" y="3" width="22" height="11" rx="2" /><path d="M5 14v7M12 14v7M19 14v7" />
-                </svg>
-                <span>AC Room</span>
-              </div>
-            )}
-            {pg.foodIncluded && (
-              <div className="amenity-pill-inline">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
-                </svg>
-                <span>Meals Included</span>
-              </div>
-            )}
-            <div className="amenity-pill-inline">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-              <span>Power Backup</span>
-            </div>
-            <div className="amenity-pill-inline">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>24/7 Security</span>
-            </div>
-          </div>
-
-          {/* Wizard Badge */}
-          <div className="wizard-member-tag">
-            <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 13, height: 13 }}>
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-            WIZARD MEMBER · EXTRA 10% OFF
-          </div>
+      {/* Card Body */}
+      <div className="stay-card-body">
+        {/* Locality */}
+        <div className="stay-card-location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 14, height: 14, color: "var(--brand-600)", flexShrink: 0 }}>
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          <span>{pg.locality ? `${pg.locality}, ` : ""}{cityLabel}</span>
         </div>
 
-        {/* Bottom Pricing & Actions */}
-        <div className="oyo-card-bottom">
-          <div className="oyo-pricing-block">
-            <div className="price-main-line">
-              <span className="price-current">₹{pg.rentFrom.toLocaleString()}</span>
-              <span className="price-original">₹{originalPrice.toLocaleString()}</span>
-              <span className="price-discount-tag">{discountPercent}% off</span>
-            </div>
-            <div className="price-subtext">
-              per month · Zero Brokerage · Free Maintenance
-            </div>
+        {/* Title */}
+        <Link to={`/pg/${pg.slug}`}>
+          <h3 className="stay-card-title">{pg.title}</h3>
+        </Link>
+
+        {/* Micro Amenities */}
+        <div className="stay-card-amenity-strip">
+          {pg.wifiAvailable && (
+            <span className="amenity-chip-micro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
+                <path d="M5 12.55a11 11 0 0114.08 0" /><path d="M1.42 9a16 16 0 0121.16 0" /><circle cx="12" cy="20" r="1" fill="currentColor" />
+              </svg>
+              WiFi
+            </span>
+          )}
+          {pg.foodIncluded && (
+            <span className="amenity-chip-micro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
+                <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+              </svg>
+              Meals Included
+            </span>
+          )}
+          {pg.acAvailable && (
+            <span className="amenity-chip-micro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
+                <rect x="1" y="3" width="22" height="11" rx="2" /><path d="M5 14v7M12 14v7M19 14v7" />
+              </svg>
+              AC
+            </span>
+          )}
+          {pg.availableBeds > 0 ? (
+            <span className="amenity-chip-micro" style={{ color: "var(--emerald-700)", background: "var(--emerald-50)", borderColor: "var(--emerald-100)" }}>
+              ✓ {pg.availableBeds} beds left
+            </span>
+          ) : (
+            <span className="amenity-chip-micro" style={{ color: "var(--brand-700)", background: "var(--brand-50)" }}>
+              Filling fast
+            </span>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="stay-card-footer">
+          <div className="stay-card-price-wrap">
+            <div className="stay-card-rent">₹{pg.rentFrom.toLocaleString()}</div>
+            <div className="stay-card-rent-sub">per month · Zero Brokerage</div>
           </div>
 
-          <div className="oyo-card-actions">
-            <Link to={`/pg/${pg.slug}`} className="btn-card-outline">
-              View Details
-            </Link>
+          <div className="stay-card-actions">
             <button
               onClick={() => navigate(`/pg/${pg.slug}`)}
-              className="btn-card-primary"
+              className="btn-card-visit"
             >
-              Book Visit
+              View Stay
             </button>
           </div>
         </div>
@@ -214,14 +204,13 @@ const OYOLabelCard = ({ pg }: { pg: Listing }) => {
   );
 };
 
-/* ─── HOMEPAGE MAIN COMPONENT ─── */
+/* ─── HOMEPAGE COMPONENT ─── */
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [listings, setListings] = useState<Listing[]>([]);
   const [cities, setCities] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
-  const [codeCopied, setCodeCopied] = useState(false);
 
   // Search & Filter State
   const [city, setCity] = useState(searchParams.get("city") || "");
@@ -245,7 +234,6 @@ const HomePage = () => {
     Boolean(selectedLocality),
   ].filter(Boolean).length;
 
-  // Keep local city state in sync when URL search params change (e.g. from navbar city strip)
   useEffect(() => {
     const paramCity = searchParams.get("city") || "";
     if (paramCity !== city) {
@@ -274,7 +262,6 @@ const HomePage = () => {
       const res = await api.get("/listings", { params });
       let results: Listing[] = res.data?.listings || [];
 
-      // Filter by locality if selected
       if (selectedLocality) {
         results = results.filter(item =>
           item.locality?.toLowerCase().includes(selectedLocality.toLowerCase()) ||
@@ -282,7 +269,6 @@ const HomePage = () => {
         );
       }
 
-      // Sort results
       if (sortBy === "price_asc") {
         results.sort((a, b) => a.rentFrom - b.rentFrom);
       } else if (sortBy === "price_desc") {
@@ -294,7 +280,6 @@ const HomePage = () => {
       setListings(results);
       setTotal(results.length);
 
-      // Sync URL
       const p: Record<string, string> = {};
       if (city) p.city = city;
       if (gender) p.gender = gender;
@@ -330,102 +315,101 @@ const HomePage = () => {
     setSortBy("popular");
   };
 
-  const copyCouponCode = () => {
-    navigator.clipboard.writeText("STANZO20");
-    setCodeCopied(true);
-    setTimeout(() => setCodeCopied(false), 2500);
-  };
-
   const activeLocalities = city && LOCALITY_PRESETS[city.toLowerCase()]
     ? LOCALITY_PRESETS[city.toLowerCase()]
     : LOCALITY_PRESETS["bangalore"];
 
   return (
     <>
-      {/* ─── HERO SECTION (OYO DARK + RED AMBIENT GLOW) ─── */}
-      <section className="oyo-hero">
+      {/* ─── LUXURY HERO SECTION ─── */}
+      <section className="luxury-hero">
+        <div className="hero-ambient-glow-1" />
+        <div className="hero-ambient-glow-2" />
+        
         <div className="container">
-          <div className="hero-content">
-            <div className="hero-pill-tag">
-              <span className="hero-pill-dot" />
-              Over 1,000+ Verified PGs & Hostels in India
+          <div className="hero-container-inner">
+            <div className="hero-tag-pill">
+              <span className="hero-tag-pulse" />
+              Over 500+ Verified Stays in India
             </div>
 
-            <h1 className="hero-heading">
-              World's Leading <span>PG & Co-Living</span> Network
+            <h1 className="hero-headline">
+              Find PGs & Co-Living Spaces <br />
+              <span className="hero-headline-gradient">Where You Truly Belong</span>
             </h1>
 
-            <p className="hero-subtext">
-              Standardized rooms with nutritious meals, high-speed Wi-Fi, and 24/7 security.
+            <p className="hero-subhead">
+              Standardized rooms, freshly cooked meals, high-speed Wi-Fi, and 24/7 security.
               Zero brokerage guaranteed.
             </p>
 
-            {/* ─── FLOATING MULTI-SEGMENT OYO SEARCH BAR ─── */}
-            <div className="oyo-search-bar">
-              {/* Segment 1: City / Location */}
-              <div className="search-segment">
-                <span className="search-segment-label">
+            {/* ─── FLOATING BESPOKE SEARCH CARD ─── */}
+            <div className="search-card-float">
+              {/* Segment 1: City */}
+              <div className="search-field-box">
+                <span className="search-field-label">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 13, height: 13, color: "var(--brand-600)" }}>
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                     <circle cx="12" cy="9" r="2.5" />
                   </svg>
                   Location / City
                 </span>
-                <div className="search-segment-control">
-                  <select
-                    value={city}
-                    onChange={(e) => {
-                      setCity(e.target.value);
-                      setSelectedLocality("");
-                    }}
-                  >
-                    <option value="">All Cities in India</option>
-                    {cities.map((c) => (
-                      <option key={c} value={c}>
-                        {c.charAt(0).toUpperCase() + c.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <select
+                  className="search-field-select"
+                  value={city}
+                  onChange={(e) => {
+                    setCity(e.target.value);
+                    setSelectedLocality("");
+                  }}
+                >
+                  <option value="">All Cities in India</option>
+                  {cities.map((c) => (
+                    <option key={c} value={c}>
+                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {/* Segment 2: Gender / Stay Type */}
-              <div className="search-segment">
-                <span className="search-segment-label">
+              {/* Segment 2: Stay Type */}
+              <div className="search-field-box">
+                <span className="search-field-label">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 13, height: 13, color: "var(--brand-600)" }}>
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                   </svg>
-                  Sharing / Gender
+                  Stay Category
                 </span>
-                <div className="search-segment-control">
-                  <select value={gender} onChange={(e) => setGender(e.target.value)}>
-                    <option value="">All (Co-Living & Any)</option>
-                    <option value="male">Boys PG</option>
-                    <option value="female">Girls PG</option>
-                  </select>
-                </div>
+                <select
+                  className="search-field-select"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <option value="">All Stays</option>
+                  <option value="male">Boys PG & Hostel</option>
+                  <option value="female">Girls PG & Hostel</option>
+                  <option value="any">Co-Living Space</option>
+                </select>
               </div>
 
-              {/* Segment 3: Price Range */}
-              <div className="search-segment">
-                <span className="search-segment-label">
+              {/* Segment 3: Budget */}
+              <div className="search-field-box">
+                <span className="search-field-label">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 13, height: 13, color: "var(--brand-600)" }}>
                     <line x1="12" y1="1" x2="12" y2="23" />
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                   </svg>
                   Monthly Budget
                 </span>
-                <div className="search-rent-inputs">
+                <div className="search-field-budget-inputs">
                   <input
                     type="number"
                     placeholder="Min ₹"
                     value={rentMin}
                     onChange={(e) => setRentMin(e.target.value)}
                   />
-                  <span className="search-rent-dash">–</span>
+                  <span style={{ color: "var(--slate-400)" }}>–</span>
                   <input
                     type="number"
                     placeholder="Max ₹"
@@ -435,32 +419,32 @@ const HomePage = () => {
                 </div>
               </div>
 
-              {/* Search CTA */}
-              <button className="search-btn-cta" onClick={fetchListings}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 18, height: 18 }}>
+              {/* CTA */}
+              <button className="search-btn-primary" onClick={fetchListings}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 17, height: 17 }}>
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-                Search PGs
+                Find Stays
               </button>
             </div>
 
-            {/* Hero Trust Badges */}
-            <div className="hero-trust-row">
-              <div className="hero-trust-item">
+            {/* Trust Badges */}
+            <div className="hero-trust-bar">
+              <div className="hero-trust-badge">
                 <svg className="hero-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                   <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
-                <span>100% Verified Photos & Owners</span>
+                <span>100% Verified Properties</span>
               </div>
-              <div className="hero-trust-item">
+              <div className="hero-trust-badge">
                 <svg className="hero-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
-                <span>Zero Brokerage Forever</span>
+                <span>Zero Brokerage Ever</span>
               </div>
-              <div className="hero-trust-item">
+              <div className="hero-trust-badge">
                 <svg className="hero-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 14 14" />
@@ -472,47 +456,80 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ─── STANZO WIZARD PROMO STRIP ─── */}
-      <section className="promo-strip-section">
+      {/* ─── POPULAR CITIES HUB EXPLORER ─── */}
+      <section className="cities-explorer-section">
         <div className="container">
-          <div className="wizard-promo-card">
-            <div className="wizard-promo-left">
-              <div className="wizard-badge-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18 }}>
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                WIZARD
-              </div>
-              <div className="wizard-promo-text">
-                <h4>Stanzo Wizard Membership Deal</h4>
-                <p>Get flat 20% OFF on your 1st month rent + Free Maintenance. Valid across all verified stays.</p>
-              </div>
+          <div className="section-header-row">
+            <div>
+              <h2 className="section-title">Explore Top Tech & Student Hubs</h2>
+              <p className="section-subtitle">Curated premium accommodations close to major tech parks & colleges</p>
             </div>
+          </div>
 
-            <div className="wizard-promo-right">
-              <span className="coupon-pill">CODE: STANZO20</span>
-              <button className="btn-copy-code" onClick={copyCouponCode}>
-                {codeCopied ? "✓ Copied!" : "Copy Code"}
-              </button>
-            </div>
+          <div className="cities-grid">
+            {POPULAR_CITY_HUBS.map((hub) => (
+              <Link
+                key={hub.slug}
+                to={`/city/${hub.slug}`}
+                className="city-card-tile"
+              >
+                <img src={hub.image} alt={hub.name} className="city-tile-img" loading="lazy" />
+                <div className="city-tile-overlay">
+                  <div className="city-tile-name">{hub.name}</div>
+                  <div className="city-tile-count">{hub.areas}</div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ─── MAIN RESULTS SECTION (2-COLUMN OYO LAYOUT) ─── */}
+      {/* ─── MAIN RESULTS & FILTERS SECTION ─── */}
       <section className="results-page-section">
         <div className="container">
-          <div className="results-layout">
-            {/* Backdrop for mobile drawer */}
-            {mobileFiltersOpen && (
-              <div
-                className="filter-drawer-backdrop"
-                onClick={() => setMobileFiltersOpen(false)}
-              />
-            )}
+          {/* Quick Filter Collections Bar */}
+          <div className="quick-collections-bar">
+            <button
+              onClick={() => { setGender(""); setFood(false); setAc(false); }}
+              className={`quick-tab-pill ${!gender && !food && !ac ? "active" : ""}`}
+            >
+              All Stays
+            </button>
+            <button
+              onClick={() => setGender(gender === "male" ? "" : "male")}
+              className={`quick-tab-pill ${gender === "male" ? "active" : ""}`}
+            >
+              Boys PGs
+            </button>
+            <button
+              onClick={() => setGender(gender === "female" ? "" : "female")}
+              className={`quick-tab-pill ${gender === "female" ? "active" : ""}`}
+            >
+              Girls PGs
+            </button>
+            <button
+              onClick={() => setGender(gender === "any" ? "" : "any")}
+              className={`quick-tab-pill ${gender === "any" ? "active" : ""}`}
+            >
+              Co-Living
+            </button>
+            <button
+              onClick={() => setFood(!food)}
+              className={`quick-tab-pill ${food ? "active" : ""}`}
+            >
+              🍱 Food Included
+            </button>
+            <button
+              onClick={() => setAc(!ac)}
+              className={`quick-tab-pill ${ac ? "active" : ""}`}
+            >
+              ❄️ AC Available
+            </button>
+          </div>
 
-            {/* ─── LEFT STICKY FILTERS SIDEBAR / MOBILE DRAWER ─── */}
-            <aside className={`filter-sidebar ${mobileFiltersOpen ? "drawer-open" : ""}`}>
+          <div className="results-layout">
+            {/* Left Filter Sidebar */}
+            <aside className="filter-sidebar">
               <div className="filter-sidebar-header">
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <h3 className="filter-sidebar-title">Filters</h3>
@@ -520,26 +537,17 @@ const HomePage = () => {
                     <span className="filter-count-badge">{activeFiltersCount}</span>
                   )}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {activeFiltersCount > 0 && (
-                    <button className="filter-sidebar-reset" onClick={clearAllFilters}>
-                      Clear All
-                    </button>
-                  )}
-                  <button
-                    className="filter-drawer-close-btn"
-                    onClick={() => setMobileFiltersOpen(false)}
-                    aria-label="Close filters"
-                  >
-                    ✕
+                {activeFiltersCount > 0 && (
+                  <button className="filter-sidebar-reset" onClick={clearAllFilters}>
+                    Clear All
                   </button>
-                </div>
+                )}
               </div>
 
-              {/* Popular Localities */}
+              {/* Localities */}
               <div className="filter-group">
                 <span className="filter-group-label">
-                  Popular Localities {city ? `in ${city.charAt(0).toUpperCase() + city.slice(1)}` : ""}
+                  Localities {city ? `in ${city.charAt(0).toUpperCase() + city.slice(1)}` : ""}
                 </span>
                 <div className="locality-chips-wrap">
                   {activeLocalities.map((loc) => (
@@ -554,7 +562,7 @@ const HomePage = () => {
                 </div>
               </div>
 
-              {/* Gender Preference */}
+              {/* Category */}
               <div className="filter-group">
                 <span className="filter-group-label">Stay Category</span>
                 <label className="filter-checkbox-item">
@@ -592,7 +600,7 @@ const HomePage = () => {
                     checked={food}
                     onChange={() => setFood(!food)}
                   />
-                  <span>Food / Meals Included</span>
+                  <span>Meals Included</span>
                 </label>
                 <label className="filter-checkbox-item">
                   <input
@@ -612,113 +620,88 @@ const HomePage = () => {
                 </label>
               </div>
 
-              {/* Quick Budget Ranges */}
+              {/* Budget */}
               <div className="filter-group">
                 <span className="filter-group-label">Budget Ranges</span>
                 <label className="filter-checkbox-item">
                   <input
                     type="checkbox"
-                    checked={rentMax === "7000"}
+                    checked={rentMax === "8000"}
                     onChange={() => {
-                      if (rentMax === "7000") {
+                      if (rentMax === "8000") {
                         setRentMin("");
                         setRentMax("");
                       } else {
                         setRentMin("0");
-                        setRentMax("7000");
+                        setRentMax("8000");
                       }
                     }}
                   />
-                  <span>Under ₹7,000 / month</span>
+                  <span>Under ₹8,000 / month</span>
                 </label>
                 <label className="filter-checkbox-item">
                   <input
                     type="checkbox"
-                    checked={rentMin === "7000" && rentMax === "12000"}
+                    checked={rentMin === "8000" && rentMax === "15000"}
                     onChange={() => {
-                      if (rentMin === "7000") {
+                      if (rentMin === "8000") {
                         setRentMin("");
                         setRentMax("");
                       } else {
-                        setRentMin("7000");
-                        setRentMax("12000");
+                        setRentMin("8000");
+                        setRentMax("15000");
                       }
                     }}
                   />
-                  <span>₹7,000 – ₹12,000 / month</span>
+                  <span>₹8,000 – ₹15,000 / month</span>
                 </label>
                 <label className="filter-checkbox-item">
                   <input
                     type="checkbox"
-                    checked={rentMin === "12000"}
+                    checked={rentMin === "15000"}
                     onChange={() => {
-                      if (rentMin === "12000") {
+                      if (rentMin === "15000") {
                         setRentMin("");
                         setRentMax("");
                       } else {
-                        setRentMin("12000");
+                        setRentMin("15000");
                         setRentMax("");
                       }
                     }}
                   />
-                  <span>₹12,000+ / month (Premium)</span>
+                  <span>₹15,000+ (Premium Stays)</span>
                 </label>
               </div>
             </aside>
 
-            {/* ─── RIGHT RESULTS COLUMN ─── */}
+            {/* Right Listings Column */}
             <main>
-              {/* Header Bar: Count + Mobile Filter Trigger + Sort */}
+              {/* Header Bar */}
               <div className="results-header-bar">
-                <div className="results-header-left">
-                  <h2 className="results-count-title">
-                    {loading
-                      ? "Searching verified PGs..."
-                      : `${total > 0 ? total : listings.length} PG${(total || listings.length) !== 1 ? "s" : ""} Available${city ? ` in ${city.charAt(0).toUpperCase() + city.slice(1)}` : " across India"}`}
-                  </h2>
-                </div>
+                <h2 className="results-count-title">
+                  {loading
+                    ? "Searching verified stays..."
+                    : `${total > 0 ? total : listings.length} Verified Stay${(total || listings.length) !== 1 ? "s" : ""}${city ? ` in ${city.charAt(0).toUpperCase() + city.slice(1)}` : " Across India"}`}
+                </h2>
 
-                <div className="results-header-actions">
-                  <button
-                    className="mobile-filter-trigger-btn"
-                    onClick={() => setMobileFiltersOpen(true)}
+                <div className="results-sort-wrap">
+                  <span className="results-sort-label">Sort:</span>
+                  <select
+                    className="results-sort-select"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
                   >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 16, height: 16 }}>
-                      <line x1="4" y1="21" x2="4" y2="14" />
-                      <line x1="4" y1="10" x2="4" y2="3" />
-                      <line x1="12" y1="21" x2="12" y2="12" />
-                      <line x1="12" y1="8" x2="12" y2="3" />
-                      <line x1="20" y1="21" x2="20" y2="16" />
-                      <line x1="20" y1="12" x2="20" y2="3" />
-                      <line x1="1" y1="14" x2="7" y2="14" />
-                      <line x1="9" y1="8" x2="15" y2="8" />
-                      <line x1="17" y1="16" x2="23" y2="16" />
-                    </svg>
-                    <span>Filters</span>
-                    {activeFiltersCount > 0 && (
-                      <span className="filter-count-badge">{activeFiltersCount}</span>
-                    )}
-                  </button>
-
-                  <div className="results-sort-wrap">
-                    <span className="results-sort-label">Sort By:</span>
-                    <select
-                      className="results-sort-select"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                    >
-                      <option value="popular">Popularity</option>
-                      <option value="price_asc">Price: Low to High</option>
-                      <option value="price_desc">Price: High to Low</option>
-                      <option value="beds">Available Beds</option>
-                    </select>
-                  </div>
+                    <option value="popular">Recommended</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="beds">Available Beds</option>
+                  </select>
                 </div>
               </div>
 
-              {/* Listings Stack */}
+              {/* Grid or Skeletons */}
               {loading ? (
-                <div className="listings-stack">
+                <div className="listings-grid-layout">
                   {Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="skeleton-card" />
                   ))}
@@ -729,18 +712,18 @@ const HomePage = () => {
                     <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z" />
                     <path d="M9 22V12h6v10" />
                   </svg>
-                  <h3 className="empty-results-title">No PGs Found Matching Your Criteria</h3>
+                  <h3 className="empty-results-title">No Stays Found Matching Filters</h3>
                   <p className="empty-results-sub">
                     Try broadening your budget range, clearing filters, or browsing other popular areas.
                   </p>
-                  <button onClick={clearAllFilters} className="btn-card-primary">
+                  <button onClick={clearAllFilters} className="btn-card-visit">
                     Clear All Filters
                   </button>
                 </div>
               ) : (
-                <div className="listings-stack">
+                <div className="listings-grid-layout">
                   {listings.map((pg) => (
-                    <OYOLabelCard key={pg._id} pg={pg} />
+                    <StayCard key={pg._id} pg={pg} />
                   ))}
                 </div>
               )}
@@ -749,56 +732,85 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ─── WHY STANZO PG (VALUE HIGHLIGHTS) ─── */}
-      <section className="why-section">
+      {/* ─── WHY CHOOSE STANZO ─── */}
+      <section className="why-stanzo-section">
         <div className="container">
-          <div className="section-headline">
-            <h2>Why Choose Stanzo PG?</h2>
-            <p>India's most trusted network of student and professional accommodations</p>
+          <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto" }}>
+            <h2 className="section-title">The Stanzo Living Experience</h2>
+            <p className="section-subtitle">Standardized quality and complete peace of mind in every home</p>
           </div>
 
-          <div className="why-grid">
-            <div className="why-card">
-              <div className="why-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 24, height: 24 }}>
+          <div className="why-stanzo-grid">
+            <div className="why-feature-card">
+              <div className="why-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} style={{ width: 24, height: 24 }}>
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                   <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
               </div>
-              <h3>100% Verified Stays</h3>
-              <p>Every PG is personally inspected by our ground team for hygiene, safety, and standardized amenities.</p>
+              <h3 className="why-feature-title">100% Verified Stays</h3>
+              <p className="why-feature-desc">Every property is personally audited for safety, water supply, hygiene, and room standards.</p>
             </div>
 
-            <div className="why-card">
-              <div className="why-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 24, height: 24 }}>
+            <div className="why-feature-card">
+              <div className="why-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} style={{ width: 24, height: 24 }}>
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
               </div>
-              <h3>Zero Brokerage Always</h3>
-              <p>Connect directly with property managers. No middlemen, no commissions, no hidden fees ever.</p>
+              <h3 className="why-feature-title">Zero Brokerage Always</h3>
+              <p className="why-feature-desc">Deal directly with verified property managers. No middlemen fees or hidden charges ever.</p>
             </div>
 
-            <div className="why-card">
-              <div className="why-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 24, height: 24 }}>
+            <div className="why-feature-card">
+              <div className="why-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} style={{ width: 24, height: 24 }}>
                   <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 01-4-4V8z" />
                 </svg>
               </div>
-              <h3>Fresh Homestyle Meals</h3>
-              <p>Nutritious breakfast, lunch, and dinner cooked fresh daily with clean RO drinking water.</p>
+              <h3 className="why-feature-title">Fresh Homestyle Food</h3>
+              <p className="why-feature-desc">Nutritious meals cooked fresh daily in hygienic kitchens with clean RO drinking water.</p>
             </div>
 
-            <div className="why-card">
-              <div className="why-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 24, height: 24 }}>
+            <div className="why-feature-card">
+              <div className="why-feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} style={{ width: 24, height: 24 }}>
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               </div>
-              <h3>Safe & Secure Living</h3>
-              <p>Equipped with 24/7 CCTV surveillance, biometric locks, professional wardens, and power backup.</p>
+              <h3 className="why-feature-title">3-Tier Safety & CCTV</h3>
+              <p className="why-feature-desc">24/7 CCTV surveillance, biometric access, and on-ground emergency support teams.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── OWNER PARTNER CTA ─── */}
+      <section className="owner-cta-section">
+        <div className="container">
+          <div className="owner-cta-card">
+            <div className="owner-cta-content">
+              <div className="owner-cta-tag">
+                <span>✦ Property Owners & Landlords</span>
+              </div>
+              <h2 className="owner-cta-title">
+                Have a PG or Hostel? <br />
+                Partner with Stanzo & Get 100% Occupancy
+              </h2>
+              <p className="owner-cta-sub">
+                List your property for free, receive verified tenant inquiries, manage bookings, and automate rent collection seamlessly.
+              </p>
+            </div>
+
+            <a
+              href="https://stanzo.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="owner-cta-btn"
+            >
+              <span>List Your Property Free →</span>
+            </a>
           </div>
         </div>
       </section>

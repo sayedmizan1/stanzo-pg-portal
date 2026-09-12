@@ -4,14 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const TOP_CITIES = [
   { name: "All Cities", slug: "" },
   { name: "Bangalore", slug: "bangalore" },
-  { name: "Chennai", slug: "chennai" },
-  { name: "Delhi", slug: "delhi" },
   { name: "Gurgaon", slug: "gurgaon" },
   { name: "Hyderabad", slug: "hyderabad" },
-  { name: "Kolkata", slug: "kolkata" },
-  { name: "Mumbai", slug: "mumbai" },
-  { name: "Noida", slug: "noida" },
   { name: "Pune", slug: "pune" },
+  { name: "Mumbai", slug: "mumbai" },
+  { name: "Delhi", slug: "delhi" },
+  { name: "Chennai", slug: "chennai" },
+  { name: "Noida", slug: "noida" },
+  { name: "Kolkata", slug: "kolkata" },
 ];
 
 const Navbar = () => {
@@ -25,7 +25,6 @@ const Navbar = () => {
     setMenuOpen(false);
   }, [location.pathname, location.search]);
 
-  // Check active city from URL params or pathname
   const searchParams = new URLSearchParams(location.search);
   const currentParamCity = searchParams.get("city") || "";
   const isCityPage = location.pathname.startsWith("/city/");
@@ -36,7 +35,6 @@ const Navbar = () => {
     if (!slug) {
       navigate("/");
     } else {
-      // Navigate to dedicated city page for better SEO and UX
       navigate(`/city/${slug}`);
     }
   };
@@ -76,7 +74,7 @@ const Navbar = () => {
                   STAN<span>Z</span>O
                 </span>
                 <span className="brand-logo-sub">
-                  PG & HOSTELS
+                  PG & LIVING
                 </span>
               </div>
             </Link>
@@ -89,22 +87,27 @@ const Navbar = () => {
                 rel="noopener noreferrer"
                 className="nav-link-item"
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
+                <div className="nav-link-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} style={{ width: 16, height: 16 }}>
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
                 <div>
-                  <span>List Your Property</span>
-                  <span className="nav-link-sub">Start earning today</span>
+                  <span style={{ display: "block", lineHeight: 1.2 }}>List Your Property</span>
+                  <span style={{ fontSize: 11, color: "var(--slate-400)", fontWeight: 500 }}>Zero Commission</span>
                 </div>
               </a>
 
               <a href="tel:08045678900" className="nav-link-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 18, height: 18 }}>
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
+                <div className="nav-link-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} style={{ width: 16, height: 16 }}>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </div>
                 <div>
-                  <span>080-4567-8900</span>
-                  <span className="nav-link-sub">24x7 Booking Helpline</span>
+                  <span style={{ display: "block", lineHeight: 1.2 }}>080-4567-8900</span>
+                  <span style={{ fontSize: 11, color: "var(--slate-400)", fontWeight: 500 }}>24x7 Helpline</span>
                 </div>
               </a>
             </div>
@@ -117,11 +120,20 @@ const Navbar = () => {
                 rel="noopener noreferrer"
                 className="btn-owner-login"
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 16, height: 16 }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 15, height: 15 }}>
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                Owner Login
+                Owner Portal
+              </a>
+
+              <a
+                href={dashboardUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-list-property-nav"
+              >
+                <span>+ List PG</span>
               </a>
 
               {/* Mobile Hamburger Toggle */}
@@ -131,12 +143,12 @@ const Navbar = () => {
                 aria-label="Toggle Navigation"
               >
                 {menuOpen ? (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 24, height: 24 }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 22, height: 22 }}>
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 ) : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 24, height: 24 }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} style={{ width: 22, height: 22 }}>
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <line x1="3" y1="12" x2="21" y2="12" />
                     <line x1="3" y1="18" x2="21" y2="18" />
@@ -151,7 +163,7 @@ const Navbar = () => {
       {/* Mobile Drawer */}
       <div className={`mobile-nav-drawer ${menuOpen ? "open" : ""}`}>
         <Link to="/" className="mobile-nav-item" onClick={() => setMenuOpen(false)}>
-          <span>Find PGs & Hostels</span>
+          <span>Explore All PGs</span>
           <span>→</span>
         </Link>
         <a
@@ -169,27 +181,27 @@ const Navbar = () => {
           className="mobile-nav-item"
           onClick={() => setMenuOpen(false)}
         >
-          <span>Call 24x7 Helpline: 080-4567-8900</span>
+          <span>24x7 Helpline: 080-4567-8900</span>
           <span>📞</span>
         </a>
         <a
           href={`${dashboardUrl}/login`}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-card-primary"
-          style={{ textAlign: "center", display: "block", textDecoration: "none" }}
+          className="btn-card-visit"
+          style={{ textAlign: "center", display: "block", textDecoration: "none", padding: "12px" }}
           onClick={() => setMenuOpen(false)}
         >
-          Property Owner Login
+          Owner Portal Login
         </a>
       </div>
 
-      {/* City Quick-Jump Strip (OYO Style) */}
+      {/* City Quick Navigation Strip */}
       <div className="city-strip-nav">
         <div className="container">
           <div className="city-strip-inner">
             {TOP_CITIES.map((c) => {
-              const isActive = (!slugActive(activeCitySlug) && c.slug === "") || activeCitySlug.toLowerCase() === c.slug.toLowerCase();
+              const isActive = (!activeCitySlug && c.slug === "") || activeCitySlug.toLowerCase() === c.slug.toLowerCase();
               return (
                 <button
                   key={c.name}
@@ -197,11 +209,6 @@ const Navbar = () => {
                   className={`city-strip-pill ${isActive ? "active" : ""}`}
                 >
                   <span>{c.name}</span>
-                  {c.slug !== "" && (
-                    <svg className="city-strip-dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  )}
                 </button>
               );
             })}
@@ -211,9 +218,5 @@ const Navbar = () => {
     </header>
   );
 };
-
-function slugActive(activeSlug: string) {
-  return activeSlug !== "";
-}
 
 export default Navbar;

@@ -42,9 +42,123 @@ const LOCALITY_PRESETS: Record<string, string[]> = {
   pune: ["Hinjewadi", "Viman Nagar", "Kothrud", "Wakad", "Baner"],
 };
 
+/* ─── STAY CARD COMPONENT ─── */
+const StayCard = ({ pg }: { pg: Listing }) => {
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+  const navigate = useNavigate();
+
+  const photosList = pg.photos && pg.photos.length > 0 ? pg.photos : FALLBACK_PHOTOS;
+  const currentPhoto = photosList[activePhotoIdx] || photosList[0];
+  const cityLabel = pg.city.charAt(0).toUpperCase() + pg.city.slice(1);
+
+  return (
+    <div className="stay-card-luxury">
+      <div className="stay-card-media">
+        <Link to={`/pg/${pg.slug}`}>
+          <img
+            src={currentPhoto}
+            alt={pg.title}
+            className="stay-card-img"
+            loading="lazy"
+          />
+        </Link>
+
+        <div className="stay-card-badges-top">
+          <div className="badge-verified-pill">
+            <span className="badge-verified-dot" />
+            <span>Stanzo Verified</span>
+          </div>
+
+          <div className={`badge-gender-pill ${pg.genderPreference}`}>
+            {GENDER_LABELS[pg.genderPreference] || "Co-Living"}
+          </div>
+        </div>
+
+        {photosList.length > 1 && (
+          <div className="stay-card-dots">
+            {photosList.slice(0, 4).map((_, idx) => (
+              <span
+                key={idx}
+                className={`stay-card-dot ${idx === activePhotoIdx ? "active" : ""}`}
+                onMouseEnter={() => setActivePhotoIdx(idx)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="stay-card-body">
+        <div className="stay-card-location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 14, height: 14, color: "var(--brand-600)", flexShrink: 0 }}>
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          <span>{pg.locality ? `${pg.locality}, ` : ""}{cityLabel}</span>
+        </div>
+
+        <Link to={`/pg/${pg.slug}`}>
+          <h3 className="stay-card-title">{pg.title}</h3>
+        </Link>
+
+        <div className="stay-card-amenity-strip">
+          {pg.wifiAvailable && (
+            <span className="amenity-chip-micro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
+                <path d="M5 12.55a11 11 0 0114.08 0" /><path d="M1.42 9a16 16 0 0121.16 0" /><circle cx="12" cy="20" r="1" fill="currentColor" />
+              </svg>
+              WiFi
+            </span>
+          )}
+          {pg.foodIncluded && (
+            <span className="amenity-chip-micro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
+                <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+              </svg>
+              Meals Included
+            </span>
+          )}
+          {pg.acAvailable && (
+            <span className="amenity-chip-micro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 12, height: 12 }}>
+                <rect x="1" y="3" width="22" height="11" rx="2" /><path d="M5 14v7M12 14v7M19 14v7" />
+              </svg>
+              AC
+            </span>
+          )}
+          {pg.availableBeds > 0 ? (
+            <span className="amenity-chip-micro" style={{ color: "var(--emerald-700)", background: "var(--emerald-50)", borderColor: "var(--emerald-100)" }}>
+              ✓ {pg.availableBeds} beds left
+            </span>
+          ) : (
+            <span className="amenity-chip-micro" style={{ color: "var(--brand-700)", background: "var(--brand-50)" }}>
+              Filling fast
+            </span>
+          )}
+        </div>
+
+        <div className="stay-card-footer">
+          <div className="stay-card-price-wrap">
+            <div className="stay-card-rent">₹{pg.rentFrom.toLocaleString()}</div>
+            <div className="stay-card-rent-sub">per month · Zero Brokerage</div>
+          </div>
+
+          <div className="stay-card-actions">
+            <button
+              onClick={() => navigate(`/pg/${pg.slug}`)}
+              className="btn-card-visit"
+            >
+              View Stay
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── CITY PAGE COMPONENT ─── */
 const CityPage = () => {
   const { city } = useParams<{ city: string }>();
-  const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
@@ -54,7 +168,9 @@ const CityPage = () => {
   const [ac, setAc] = useState(false);
   const [wifi, setWifi] = useState(false);
   const [sortBy, setSortBy] = useState("popular");
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const cityLabel = city ? city.charAt(0).toUpperCase() + city.slice(1) : "";
+  const localities = city && LOCALITY_PRESETS[city.toLowerCase()] ? LOCALITY_PRESETS[city.toLowerCase()] : [];
 
   const activeFiltersCount = [
     Boolean(gender),
@@ -65,7 +181,6 @@ const CityPage = () => {
   ].filter(Boolean).length;
 
   useEffect(() => {
-    const cityLabel = city ? city.charAt(0).toUpperCase() + city.slice(1) : "";
     document.title = cityLabel
       ? `PG in ${cityLabel} | Find Rooms & Hostels - Stanzo`
       : "Stanzo — Find PGs & Hostels Across India";
@@ -73,7 +188,7 @@ const CityPage = () => {
     return () => {
       document.title = "Stanzo — Find PGs & Hostels Across India";
     };
-  }, [city]);
+  }, [cityLabel]);
 
   useEffect(() => {
     setLoading(true);
@@ -108,7 +223,6 @@ const CityPage = () => {
       .finally(() => setLoading(false));
   }, [city, gender, food, ac, wifi, selectedLocality, sortBy]);
 
-
   const clearAllFilters = () => {
     setSelectedLocality("");
     setGender("");
@@ -117,14 +231,11 @@ const CityPage = () => {
     setWifi(false);
   };
 
-  const cityLabel = city ? city.charAt(0).toUpperCase() + city.slice(1) : "";
-  const localities = city && LOCALITY_PRESETS[city.toLowerCase()] ? LOCALITY_PRESETS[city.toLowerCase()] : [];
-
   return (
     <div className="results-page-section" style={{ minHeight: "80vh" }}>
       <div className="container">
         {/* City Breadcrumbs & Header */}
-        <div style={{ marginBottom: 24 }}>
+        <div style={{ marginBottom: 28 }}>
           <div className="detail-breadcrumb">
             <Link to="/">Home</Link>
             <span>/</span>
@@ -133,31 +244,23 @@ const CityPage = () => {
 
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
             <div>
-              <h1 style={{ fontSize: "clamp(24px, 4vw, 34px)", fontWeight: 900, color: "var(--slate-900)", letterSpacing: "-0.5px" }}>
-                PGs & Hostels in {cityLabel}
+              <h1 style={{ fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 900, color: "var(--slate-900)", letterSpacing: "-0.02em" }}>
+                PGs & Co-Living in {cityLabel}
               </h1>
-              <p style={{ color: "var(--slate-600)", fontSize: 14, fontWeight: 500, marginTop: 4 }}>
-                {loading ? "Searching verified stays..." : `${total} Stanzo Assured verified accommodations with meals & zero brokerage`}
+              <p style={{ color: "var(--slate-600)", fontSize: 14.5, fontWeight: 500, marginTop: 4 }}>
+                {loading ? "Searching verified stays..." : `${total} Stanzo Verified accommodations with homestyle meals & zero brokerage`}
               </p>
             </div>
-            <Link to="/" className="btn-card-outline" style={{ fontSize: 13 }}>
-              ← View All Cities
+            <Link to="/" className="quick-tab-pill" style={{ fontSize: 13 }}>
+              ← All Cities
             </Link>
           </div>
         </div>
 
         {/* 2-Column Results Layout */}
         <div className="results-layout">
-          {/* Backdrop for mobile drawer */}
-          {mobileFiltersOpen && (
-            <div
-              className="filter-drawer-backdrop"
-              onClick={() => setMobileFiltersOpen(false)}
-            />
-          )}
-
-          {/* Filters Sidebar */}
-          <aside className={`filter-sidebar ${mobileFiltersOpen ? "drawer-open" : ""}`}>
+          {/* Left Sidebar */}
+          <aside className="filter-sidebar">
             <div className="filter-sidebar-header">
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <h3 className="filter-sidebar-title">Filters</h3>
@@ -165,26 +268,17 @@ const CityPage = () => {
                   <span className="filter-count-badge">{activeFiltersCount}</span>
                 )}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {activeFiltersCount > 0 && (
-                  <button className="filter-sidebar-reset" onClick={clearAllFilters}>
-                    Clear All
-                  </button>
-                )}
-                <button
-                  className="filter-drawer-close-btn"
-                  onClick={() => setMobileFiltersOpen(false)}
-                  aria-label="Close filters"
-                >
-                  ✕
+              {activeFiltersCount > 0 && (
+                <button className="filter-sidebar-reset" onClick={clearAllFilters}>
+                  Clear All
                 </button>
-              </div>
+              )}
             </div>
 
             {/* Localities */}
             {localities.length > 0 && (
               <div className="filter-group">
-                <span className="filter-group-label">Popular Localities</span>
+                <span className="filter-group-label">Popular Areas in {cityLabel}</span>
                 <div className="locality-chips-wrap">
                   {localities.map((loc) => (
                     <button
@@ -199,7 +293,7 @@ const CityPage = () => {
               </div>
             )}
 
-            {/* Gender */}
+            {/* Category */}
             <div className="filter-group">
               <span className="filter-group-label">Stay Category</span>
               <label className="filter-checkbox-item">
@@ -208,7 +302,7 @@ const CityPage = () => {
                   checked={gender === "male"}
                   onChange={() => setGender(gender === "male" ? "" : "male")}
                 />
-                <span>Boys PG</span>
+                <span>Boys PG & Hostels</span>
               </label>
               <label className="filter-checkbox-item">
                 <input
@@ -216,7 +310,7 @@ const CityPage = () => {
                   checked={gender === "female"}
                   onChange={() => setGender(gender === "female" ? "" : "female")}
                 />
-                <span>Girls PG</span>
+                <span>Girls PG & Hostels</span>
               </label>
               <label className="filter-checkbox-item">
                 <input
@@ -224,20 +318,20 @@ const CityPage = () => {
                   checked={gender === "any"}
                   onChange={() => setGender(gender === "any" ? "" : "any")}
                 />
-                <span>Co-Living</span>
+                <span>Co-Living (Any Gender)</span>
               </label>
             </div>
 
             {/* Amenities */}
             <div className="filter-group">
-              <span className="filter-group-label">Key Amenities</span>
+              <span className="filter-group-label">Amenities</span>
               <label className="filter-checkbox-item">
                 <input
                   type="checkbox"
                   checked={food}
                   onChange={() => setFood(!food)}
                 />
-                <span>Food / Meals Included</span>
+                <span>Meals Included</span>
               </label>
               <label className="filter-checkbox-item">
                 <input
@@ -258,55 +352,32 @@ const CityPage = () => {
             </div>
           </aside>
 
-          {/* Results List */}
+          {/* Right Results Column */}
           <main>
             <div className="results-header-bar">
-              <div className="results-header-left">
-                <span style={{ fontSize: 18, fontWeight: 800, color: "var(--slate-900)" }}>
-                  {loading ? "Finding stays..." : `${listings.length} Stay${listings.length !== 1 ? "s" : ""} in ${cityLabel}`}
-                </span>
-              </div>
+              <h2 className="results-count-title">
+                {loading
+                  ? `Searching stays in ${cityLabel}...`
+                  : `${total} Stay${total !== 1 ? "s" : ""} in ${cityLabel}`}
+              </h2>
 
-              <div className="results-header-actions">
-                <button
-                  className="mobile-filter-trigger-btn"
-                  onClick={() => setMobileFiltersOpen(true)}
+              <div className="results-sort-wrap">
+                <span className="results-sort-label">Sort:</span>
+                <select
+                  className="results-sort-select"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 16, height: 16 }}>
-                    <line x1="4" y1="21" x2="4" y2="14" />
-                    <line x1="4" y1="10" x2="4" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12" y2="3" />
-                    <line x1="20" y1="21" x2="20" y2="16" />
-                    <line x1="20" y1="12" x2="20" y2="3" />
-                    <line x1="1" y1="14" x2="7" y2="14" />
-                    <line x1="9" y1="8" x2="15" y2="8" />
-                    <line x1="17" y1="16" x2="23" y2="16" />
-                  </svg>
-                  <span>Filters</span>
-                  {activeFiltersCount > 0 && (
-                    <span className="filter-count-badge">{activeFiltersCount}</span>
-                  )}
-                </button>
-
-                <div className="results-sort-wrap">
-                  <span className="results-sort-label">Sort:</span>
-                  <select
-                    className="results-sort-select"
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                  >
-                    <option value="popular">Popularity</option>
-                    <option value="price_asc">Price: Low to High</option>
-                    <option value="price_desc">Price: High to Low</option>
-                  </select>
-                </div>
+                  <option value="popular">Recommended</option>
+                  <option value="price_asc">Price: Low to High</option>
+                  <option value="price_desc">Price: High to Low</option>
+                </select>
               </div>
             </div>
 
             {loading ? (
-              <div className="listings-stack">
-                {Array.from({ length: 3 }).map((_, i) => (
+              <div className="listings-grid-layout">
+                {Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="skeleton-card" />
                 ))}
               </div>
@@ -316,111 +387,19 @@ const CityPage = () => {
                   <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z" />
                   <path d="M9 22V12h6v10" />
                 </svg>
-                <h3 className="empty-results-title">No PGs listed in {cityLabel} matching criteria</h3>
+                <h3 className="empty-results-title">No Stays Found in {cityLabel}</h3>
                 <p className="empty-results-sub">
-                  Try clearing your filters or explore verified accommodations across other cities.
+                  We are actively onboarding new verified properties here. Check back soon or browse nearby cities.
                 </p>
-                <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-                  {activeFiltersCount > 0 && (
-                    <button onClick={clearAllFilters} className="btn-card-outline">
-                      Clear Filters
-                    </button>
-                  )}
-                  <Link to="/" className="btn-card-primary">
-                    Browse All Cities
-                  </Link>
-                </div>
+                <button onClick={clearAllFilters} className="btn-card-visit">
+                  Clear Filters
+                </button>
               </div>
             ) : (
-              <div className="listings-stack">
-                {listings.map((pg) => {
-                  const photosList = pg.photos && pg.photos.length > 0 ? pg.photos : FALLBACK_PHOTOS;
-                  const originalPrice = Math.round((pg.rentFrom * 1.33) / 100) * 100;
-                  const discountPercent = Math.round(((originalPrice - pg.rentFrom) / originalPrice) * 100);
-
-                  return (
-                    <div key={pg._id} className="oyo-card">
-                      <div className="oyo-card-media">
-                        <img
-                          src={photosList[0]}
-                          alt={pg.title}
-                          className="oyo-card-main-img"
-                        />
-                        <div className="card-badge-assured">
-                          <span className="card-badge-assured-dot" />
-                          STANZO ASSURED
-                        </div>
-                        <div className="oyo-card-thumb-strip">
-                          {photosList.slice(0, 4).map((t, idx) => (
-                            <img key={idx} src={t} alt="" className="oyo-card-thumb" />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="oyo-card-info">
-                        <div>
-                          <div className="oyo-card-top-row">
-                            <Link to={`/pg/${pg.slug}`}>
-                              <h3 className="oyo-card-title">{pg.title}</h3>
-                            </Link>
-                            <div className="urgency-badge">🔥 Popular</div>
-                          </div>
-
-                          <div className="oyo-card-location">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ width: 14, height: 14, color: "var(--brand-600)", flexShrink: 0 }}>
-                              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-                              <circle cx="12" cy="9" r="2.5" />
-                            </svg>
-                            <span>{pg.locality ? `${pg.locality}, ` : ""}{cityLabel}</span>
-                          </div>
-
-                          <div className="oyo-card-rating-row">
-                            <span className="rating-pill-green">4.6 ★</span>
-                            <span className="rating-pill-meta">
-                              (62 Reviews) · <span className="rating-descriptor">Excellent</span>
-                            </span>
-                            <span style={{ color: "var(--border)" }}>•</span>
-                            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--brand-600)" }}>
-                              {GENDER_LABELS[pg.genderPreference]}
-                            </span>
-                          </div>
-
-                          <div className="oyo-card-amenities">
-                            {pg.wifiAvailable && <span className="amenity-pill-inline">📶 Free WiFi</span>}
-                            {pg.acAvailable && <span className="amenity-pill-inline">❄️ AC Room</span>}
-                            {pg.foodIncluded && <span className="amenity-pill-inline">🍱 Meals Included</span>}
-                            <span className="amenity-pill-inline">⚡ Power Backup</span>
-                            <span className="amenity-pill-inline">🧹 Daily Cleaning</span>
-                          </div>
-
-                          <div className="wizard-member-tag">
-                            WIZARD MEMBER · EXTRA 10% OFF
-                          </div>
-                        </div>
-
-                        <div className="oyo-card-bottom">
-                          <div className="oyo-pricing-block">
-                            <div className="price-main-line">
-                              <span className="price-current">₹{pg.rentFrom.toLocaleString()}</span>
-                              <span className="price-original">₹{originalPrice.toLocaleString()}</span>
-                              <span className="price-discount-tag">{discountPercent}% off</span>
-                            </div>
-                            <div className="price-subtext">per month · Zero Brokerage</div>
-                          </div>
-
-                          <div className="oyo-card-actions">
-                            <Link to={`/pg/${pg.slug}`} className="btn-card-outline">
-                              View Details
-                            </Link>
-                            <button onClick={() => navigate(`/pg/${pg.slug}`)} className="btn-card-primary">
-                              Book Visit
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="listings-grid-layout">
+                {listings.map((pg) => (
+                  <StayCard key={pg._id} pg={pg} />
+                ))}
               </div>
             )}
           </main>

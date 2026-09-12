@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
 const FOOTER_CITIES = [
-  "Bangalore", "Chennai", "Delhi", "Gurgaon", "Hyderabad",
-  "Kolkata", "Mumbai", "Noida", "Pune", "Ahmedabad",
+  "Bangalore", "Gurgaon", "Hyderabad", "Pune", "Mumbai",
+  "Delhi", "Chennai", "Noida", "Kolkata", "Ahmedabad",
   "Chandigarh", "Jaipur", "Kochi", "Indore"
 ];
 
@@ -10,12 +10,12 @@ const Footer = () => {
   const dashboardUrl = import.meta.env.VITE_DASHBOARD_URL || "https://stanzo.in";
 
   return (
-    <footer className="oyo-footer">
+    <footer className="luxury-footer">
       <div className="container">
-        {/* Popular Cities Strip */}
+        {/* Popular Cities Directory */}
         <div className="footer-city-strip">
           <div className="footer-city-title">
-            Stanzo PGs & Hostels in Top Indian Cities
+            Popular PG & Co-Living Destinations Across India
           </div>
           <div className="footer-city-links">
             {FOOTER_CITIES.map((c) => (
@@ -35,22 +35,22 @@ const Footer = () => {
           {/* Brand Info */}
           <div className="footer-col-brand">
             <h3>
-              STAN<span style={{ color: "#818CF8" }}>Z</span>O <span style={{ fontSize: 13, fontWeight: 700, color: "#94A3B8" }}>PG & HOSTELS</span>
+              STAN<span style={{ color: "#818CF8" }}>Z</span>O <span style={{ fontSize: 13, fontWeight: 700, color: "#94A3B8" }}>PG & LIVING</span>
             </h3>
             <p>
-              India's leading PG & co-living discovery network. Verified properties,
-              standardized amenities, 3 daily meals, and 100% zero brokerage guaranteed.
+              India's premier student & working professional living network.
+              Standardized rooms, wholesome meals, high-speed Wi-Fi, and 100% zero brokerage guaranteed.
             </p>
-            <div style={{ marginTop: 16, display: "flex", gap: 8 }}>
-              <div style={{ background: "rgba(255,255,255,0.08)", padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700 }}>
-                🇮🇳 Made with pride in India
+            <div style={{ marginTop: 20 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)", padding: "6px 14px", borderRadius: "var(--radius-pill)", fontSize: 12, fontWeight: 700, color: "#E2E8F0" }}>
+                <span>✦ 100% Verified Accommodations</span>
               </div>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="footer-col-nav">
-            <h4>Explore Stays</h4>
+            <h4>Explore Accommodations</h4>
             <ul className="footer-nav-list">
               <li><Link to="/?gender=male">Boys PGs & Hostels</Link></li>
               <li><Link to="/?gender=female">Girls PGs & Hostels</Link></li>
@@ -66,7 +66,7 @@ const Footer = () => {
             <ul className="footer-nav-list">
               <li>
                 <a href={dashboardUrl} target="_blank" rel="noopener noreferrer">
-                  List Your Property
+                  List Your Property Free
                 </a>
               </li>
               <li>
@@ -76,26 +76,26 @@ const Footer = () => {
               </li>
               <li>
                 <a href={dashboardUrl} target="_blank" rel="noopener noreferrer">
-                  Stanzo for Business
+                  Stanzo Property Partner
                 </a>
               </li>
               <li>
                 <a href="tel:08045678900">
-                  Partner Support
+                  Partner Helpdesk
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Support & Policies */}
+          {/* Support & Legal */}
           <div className="footer-col-nav">
-            <h4>Support & Legal</h4>
+            <h4>Support & Help</h4>
             <ul className="footer-nav-list">
               <li><a href="tel:08045678900">24x7 Helpline: 080-4567-8900</a></li>
+              <li><a href="mailto:support@stanzo.in">support@stanzo.in</a></li>
               <li><a href={`${dashboardUrl}/privacy`} target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
               <li><a href={`${dashboardUrl}/terms`} target="_blank" rel="noopener noreferrer">Terms of Service</a></li>
-              <li><a href={`${dashboardUrl}/guest-policy`} target="_blank" rel="noopener noreferrer">Guest Policy</a></li>
-              <li><a href="mailto:support@stanzo.in">support@stanzo.in</a></li>
+              <li><a href={`${dashboardUrl}/guest-policy`} target="_blank" rel="noopener noreferrer">Guest Safety Policy</a></li>
             </ul>
           </div>
         </div>
@@ -103,14 +103,14 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="footer-bottom-bar">
           <div>
-            &copy; {new Date().getFullYear()} Stanzo Technologies Pvt. Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} Stanzo Living Technologies Pvt. Ltd. All rights reserved.
           </div>
           <div style={{ display: "flex", gap: 16 }}>
-            <span>Security</span>
-            <span>·</span>
-            <span>Privacy</span>
-            <span>·</span>
             <span>Zero Brokerage Promise</span>
+            <span>·</span>
+            <span>Security & Privacy</span>
+            <span>·</span>
+            <span>Verified Stays</span>
           </div>
         </div>
       </div>
